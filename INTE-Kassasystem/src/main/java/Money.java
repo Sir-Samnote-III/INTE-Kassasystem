@@ -8,8 +8,8 @@ public class Money {
         this.currency = currency;
     }
 
-    public int formattedValue(Money a){
-        return a.getValue()/1000;
+    public double formattedValue(Money a){
+        return (double)a.getValue()/100;
     }
 
     public int getValue(){
