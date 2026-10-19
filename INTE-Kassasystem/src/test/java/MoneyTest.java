@@ -13,7 +13,7 @@ public class MoneyTest {
     @Test
     void correctAmountOfMoney(){
         Money pris = new Money(1050, "SEK");
-        assertEquals(10.5, pris.formattedValue(pris));
+        assertEquals(10.5, pris.formattedValue());
     }
 
 }
