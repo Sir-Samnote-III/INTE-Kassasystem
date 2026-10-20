@@ -8,11 +8,11 @@ public class Money {
         this.currency = currency;
     }
 
-    public double formattedValue(){
-        return (double)this.getValue()/100;
+    public double formattedValue() {
+        return (double) this.getValue()/100;
     }
 
-    public int getValue(){
+    public int getValue() {
         return value;
     }
 }
