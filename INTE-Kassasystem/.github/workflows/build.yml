@@ -1,0 +1,26 @@
+name: Kassasystem CI (Byggserver)
+
+# Bestämmer NÄR byggservern ska köra (vid varje push till main-branchen)
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Servern körs på en virtuell Linux-maskin
+
+    steps:
+      - name: Hämtar koden från repot
+        uses: actions/checkout@v4
+
+      - name: Sätter upp Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven # Gör framtida byggen snabbare
+
+      - name: Kompilerar koden och kör alla tester
+        run: mvn test
