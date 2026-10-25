@@ -29,4 +29,9 @@ public class ItemTest {
         Item freeItem = new Item("Free sample", new Money(0, "SEK"));
         assertEquals(0, freeItem.getPrice().getValue());
     }
+
+    @Test
+    void nullPriceThrowsException(){
+        assertThrows(IllegalArgumentException.class, () -> new Item("Banana", null));
+    }
 }
