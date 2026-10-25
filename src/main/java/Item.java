@@ -8,6 +8,10 @@ public class Item {
             throw new IllegalArgumentException("Price must be zero or positive");
         }
         
+        if (name == null || name.isBlank()){
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
+
         this.price = price;
         this.name = name;
     }

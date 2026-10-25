@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ItemTest {
@@ -33,5 +35,12 @@ public class ItemTest {
     @Test
     void nullPriceThrowsException(){
         assertThrows(IllegalArgumentException.class, () -> new Item("Banana", null));
+    }
+
+    @ParameterizedTest 
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "  "})
+    void invalidNameThrowsException(String invalidName){
+        assertThrows(IllegalArgumentException.class, () -> new Item(invalidName, new Money(1000, "SEK")));
     }
 }
