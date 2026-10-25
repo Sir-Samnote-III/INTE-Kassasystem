@@ -16,4 +16,17 @@ public class ItemTest {
         assertEquals("Cookies", cookies.getName());
 
     }
+
+    @Test
+    void negativePriceThrowsException(){
+        Money negativePrice = new Money(-1, "SEK");
+        assertThrows(IllegalArgumentException.class,
+            () -> new Item("Banana", negativePrice));
+    }
+
+    @Test
+    void zeroPriceAllowed(){
+        Item freeItem = new Item("Free sample", new Money(0, "SEK"));
+        assertEquals(0, freeItem.getPrice().getValue());
+    }
 }

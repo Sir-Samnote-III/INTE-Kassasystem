@@ -4,6 +4,10 @@ public class Item {
     private final Money price;
 
     public Item(String name, Money price){
+        if (price.getValue() < 0) {
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
+        
         this.price = price;
         this.name = name;
     }
@@ -15,6 +19,5 @@ public class Item {
     public String getName(){
         return name;
     }
-
     //Ändring
 }
