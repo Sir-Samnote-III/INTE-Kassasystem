@@ -4,8 +4,8 @@ public class Item {
     private final Money price;
 
     public Item(String name, Money price){
-        if (price.getValue() < 0) {
-            throw new IllegalArgumentException("Price cannot be negative");
+        if (price == null || price.getValue() < 0) {
+            throw new IllegalArgumentException("Price must be zero or positive");
         }
         
         this.price = price;
