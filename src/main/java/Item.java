@@ -1,15 +1,15 @@
 public class Item {
 
-    int price;
-    String name;
+    private final String name;
+    private final Money price;
 
-    public Item(int price, String name){
+    public Item(String name, Money price){
         this.price = price;
         this.name = name;
     }
 
-    public double getPrice(){
-        return (double)price/100;
+    public Money getPrice(){
+        return price;
     }
 
     public String getName(){

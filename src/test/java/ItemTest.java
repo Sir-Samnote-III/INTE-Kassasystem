@@ -5,15 +5,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ItemTest {
 
     @Test
-    public void testPrice(){
-        Item vara1 = new Item(1000, "Banan");
-        assertEquals(10,vara1.getPrice());
+    void priceIsStoredAsMoney() {
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        assertEquals(1000, banana.getPrice().getValue());
     }
 
     @Test
-    public void testName(){
-        Item vara2 = new Item(1020, "Kex");
-            assertEquals("Kex", vara2.getName());
+    void nameIsStored() {
+        Item cookies = new Item("Cookies", new Money(1020, "SEK"));
+        assertEquals("Cookies", cookies.getName());
 
     }
 }
