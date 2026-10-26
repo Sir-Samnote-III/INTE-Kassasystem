@@ -15,4 +15,8 @@ public class Money {
     public int getValue() {
         return value;
     }
+
+    public String getCurrency(){
+        return currency;
+    }
 }
