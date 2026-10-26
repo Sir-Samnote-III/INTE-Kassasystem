@@ -14,4 +14,19 @@ public class ItemGroupTest {
         fruit.add(new Item("Banana", new Money(1000, "SEK")));
         assertEquals(1, fruit.size());
     }
+
+    @Test 
+    void groupContainsAddedItem(){
+        ItemGroup fruit = new ItemGroup("Fruit");
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        fruit.add(banana);
+        assertTrue(fruit.contains(banana));
+    }
+
+    @Test 
+    void groupDoesNotContainItemThatWasNotAdded(){
+        ItemGroup fruit = new ItemGroup("Fruit");
+        Item apple = new Item("Apple", new Money(500, "SEK"));
+        assertFalse(fruit.contains(apple));
+    }
 }

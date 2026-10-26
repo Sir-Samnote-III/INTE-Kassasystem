@@ -17,4 +17,8 @@ public class ItemGroup {
     public int size(){
         return items.size();
     }
+
+    public boolean contains(Item item){
+        return items.contains(item);
+    }
 }
