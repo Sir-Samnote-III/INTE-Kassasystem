@@ -49,4 +49,15 @@ public class ItemGroupTest {
 
         assertThrows(IllegalArgumentException.class, () -> fruit.remove(apple));
     }
+
+    @Test 
+    void addingSameItemTwiceCountsOnce(){
+        ItemGroup fruit = new ItemGroup("Fruit");
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+
+        fruit.add(banana);
+        fruit.add(banana);
+
+        assertEquals(1, fruit.size());
+    }
 }
