@@ -23,5 +23,8 @@ public class Item {
     public String getName(){
         return name;
     }
-    //Ändring
+    
+    public Money getDeposit(){
+        return new Money(0, "SEK");
+    }
 }

@@ -43,4 +43,10 @@ public class ItemTest {
     void invalidNameThrowsException(String invalidName){
         assertThrows(IllegalArgumentException.class, () -> new Item(invalidName, new Money(1000, "SEK")));
     }
+
+    @Test 
+    void itemWithoutDepositHasZeroDeposit(){
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        assertEquals(0, banana.getDeposit().getValue());
+    }
 }
