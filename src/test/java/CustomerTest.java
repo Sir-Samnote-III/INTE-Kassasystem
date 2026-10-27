@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.beans.Transient;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class CustomerTest {
 
@@ -145,5 +146,15 @@ public class CustomerTest {
         assertEquals(0, BigDecimal.ZERO.compareTo(anna.getTotalSumma()));
     }
 
+    @Test 
+    void registeredBuyMember() {
+        Membership membership = new Membership(LocalDate.of(2026, 2, 1), LocalDate.of(2027, 1, 1));
+
+        Customer customer = new Customer("Anna", "A1", "Gatna 2", "200004225432", "0701234567", "anna@gmail.com", membership);
+
+        customer.registreradeKop(new BigDecimal("250.00"));
+
+        assertEquals(500, membership.getPoints());
+    }
 
 }
