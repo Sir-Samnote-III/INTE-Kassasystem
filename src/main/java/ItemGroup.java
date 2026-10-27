@@ -23,6 +23,8 @@ public class ItemGroup {
     }
 
     public void remove(Item item){
-        items.remove(item);
+        if (!items.remove(item)){
+            throw new IllegalArgumentException("Item is not in the group");
+        }
     }
 }
