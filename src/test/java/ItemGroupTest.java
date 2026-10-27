@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,5 +95,16 @@ public class ItemGroupTest {
         }
 
         assertEquals(List.of(banana, apple), result);
+    }
+
+    @Test
+    void iteratorDoesNotAllowRemoval(){
+        ItemGroup fruit = new ItemGroup("Fruit");
+        fruit.add(new Item("Banana", new Money(1000, "SEK")));
+
+        Iterator<Item> iterator = fruit.iterator();
+        iterator.next();
+
+        assertThrows(UnsupportedOperationException.class, iterator::remove);
     }
 }

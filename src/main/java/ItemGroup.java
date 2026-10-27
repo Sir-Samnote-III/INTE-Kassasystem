@@ -1,12 +1,13 @@
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.Collections;
 
 public class ItemGroup implements Iterable<Item> {
     
     @Override
     public Iterator<Item> iterator() {
-        return items.iterator();
+        return Collections.unmodifiableSet(items).iterator();
     }
 
     private final String name;
