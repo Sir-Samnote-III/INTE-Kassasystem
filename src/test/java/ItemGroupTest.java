@@ -2,6 +2,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,5 +78,21 @@ public class ItemGroupTest {
     @ValueSource(strings = {" ", "   "})
     void invalidGroupNameThrowsException(String invalidName){
         assertThrows(IllegalArgumentException.class, () -> new ItemGroup(invalidName));
+    }
+
+    @Test 
+    void canIterateOverItemsInOrder(){
+        ItemGroup fruit = new ItemGroup("Fruit");
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        Item apple = new Item("Apple", new Money(500, "SEK"));
+        fruit.add(banana);
+        fruit.add(apple);
+
+        List<Item> result = new ArrayList<>();
+        for (Item item : fruit){
+            result.add(item);
+        }
+
+        assertEquals(List.of(banana, apple), result);
     }
 }

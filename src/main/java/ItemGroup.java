@@ -1,8 +1,14 @@
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class ItemGroup {
+public class ItemGroup implements Iterable<Item> {
     
+    @Override
+    public Iterator<Item> iterator() {
+        return items.iterator();
+    }
+
     private final String name;
     private final Set<Item> items = new LinkedHashSet<>();
 
