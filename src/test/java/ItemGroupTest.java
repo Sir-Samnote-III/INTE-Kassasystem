@@ -29,4 +29,24 @@ public class ItemGroupTest {
         Item apple = new Item("Apple", new Money(500, "SEK"));
         assertFalse(fruit.contains(apple));
     }
+
+    @Test 
+    void removingItemDecreasesSize(){
+        ItemGroup fruit = new ItemGroup("Fruit");
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        fruit.add(banana);
+
+        fruit.remove(banana);
+
+        assertEquals(0, fruit.size());
+        assertFalse(fruit.contains(banana));
+    }
+
+    @Test
+    void removingItemNotInGroupThrowsException(){
+        ItemGroup fruit = new ItemGroup("Fruit");
+        Item apple = new Item("Apple", new Money(500, "SEK"));
+
+        assertThrows(IllegalArgumentException.class, () -> fruit.remove(apple));
+    }
 }

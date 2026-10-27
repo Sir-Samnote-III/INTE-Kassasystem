@@ -21,4 +21,10 @@ public class ItemGroup {
     public boolean contains(Item item){
         return items.contains(item);
     }
+
+    public void remove(Item item){
+        if (!items.remove(item)){
+            throw new IllegalArgumentException("Item is not in the group");
+        }
+    }
 }
