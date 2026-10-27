@@ -7,11 +7,17 @@ public class ItemGroup {
     private final Set<Item> items = new LinkedHashSet<>();
 
     public ItemGroup(String name){
+        if (name == null || name.isBlank()){
+            throw new IllegalArgumentException("Group name cannot be empty");
+        }
         this.name = name;
     }
     
     public void add(Item item){
-       items.add(item);
+       if (item == null){
+            throw new IllegalArgumentException("Item cannot be null");
+       } 
+        items.add(item);
     }
 
     public int size(){

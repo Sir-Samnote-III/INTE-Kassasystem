@@ -1,4 +1,8 @@
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ItemGroupTest {
@@ -59,5 +63,18 @@ public class ItemGroupTest {
         fruit.add(banana);
 
         assertEquals(1, fruit.size());
+    }
+
+    @Test 
+    void addingNullItemThrowsException(){
+        ItemGroup fruit = new ItemGroup("Fruit");
+        assertThrows(IllegalArgumentException.class, () -> fruit.add(null));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {" ", "   "})
+    void invalidGroupNameThrowsException(String invalidName){
+        assertThrows(IllegalArgumentException.class, () -> new ItemGroup(invalidName));
     }
 }
