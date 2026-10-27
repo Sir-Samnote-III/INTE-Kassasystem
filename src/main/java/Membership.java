@@ -62,7 +62,7 @@ public class Membership {
             throw new IllegalArgumentException("Purchase amount needs to be positive!");
         }
 
-        int gainedPoints = pruchaseAmount.getValue()/50;
+        int gainedPoints = pruchaseAmount.getValue()/50; //2% andel
         totalPoints += gainedPoints;
     }
 
