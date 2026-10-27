@@ -21,4 +21,8 @@ public class ItemGroup {
     public boolean contains(Item item){
         return items.contains(item);
     }
+
+    public void remove(Item item){
+        items.remove(item);
+    }
 }
