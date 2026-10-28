@@ -19,4 +19,36 @@ public class InventoryTest{
 
         assertEquals(10, inventory.getStock(banana));   
     }
+
+    @Test
+    void removingStockDecreasesStock() {
+        Inventory inventory = new Inventory();
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        inventory.addStock(banana, 10);
+
+        inventory.removeStock(banana, 3);
+
+        assertEquals(7, inventory.getStock(banana));
+    }
+
+    @Test
+    void removingAllStockGivesZero() {
+        Inventory inventory = new Inventory();
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        inventory.addStock(banana, 10);
+
+        inventory.removeStock(banana, 10);
+
+        assertEquals(0, inventory.getStock(banana));
+    }
+
+    @Test
+    void removingMoreThanStockThrowsException() {
+        Inventory inventory = new Inventory();
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        inventory.addStock(banana, 10);
+
+        assertThrows(IllegalStateException.class, () -> inventory.removeStock(banana, 11));
+        assertEquals(10, inventory.getStock(banana));
+    }
 }
