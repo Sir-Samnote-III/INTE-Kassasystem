@@ -96,4 +96,34 @@ public class MembershipTest {
         assertEquals(2866, membership.getPoints());
     }
 
+    @Test
+    void redeemPoints_ShouldDeductPointsSuccessfully() {
+        // Arrange
+        Membership membership = new Membership(LocalDate.now(), LocalDate.now().plusYears(1));
+        Money purchase = new Money(5000, "SEK"); // 50 kr -> ger 100 poäng
+        membership.registerPoints(purchase); 
+
+        // Act
+        membership.redeemPoints(40);
+
+        // Assert
+        assertEquals(60, membership.getPoints());
+    }
+
+    @Test
+    void redeemPoints_ShouldThrowExceptionIfInsufficientPoints() {
+        // Arrange
+        Membership membership = new Membership(LocalDate.now(), LocalDate.now().plusYears(1));
+        Money purchase = new Money(1000, "SEK"); // 10 kr -> ger 20 poäng
+        membership.registerPoints(purchase);
+
+        // Act & Assert
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            membership.redeemPoints(50); // Försöker lösa in mer än vad som finns
+        });
+
+        assertEquals("Not enough points on membership", exception.getMessage());
+    }
+
+
 }
