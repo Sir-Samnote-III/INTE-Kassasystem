@@ -16,7 +16,10 @@ public class Inventory {
     }
 
     public void removeStock(Item item, int quantity) {
+        if (quantity > getStock(item)) {
+            throw new IllegalStateException("Not enough stock");
+        }
         stock.put(item, getStock(item) - quantity);
-        //inventory kan ta bort stock
+        //inventory kan ta bort stock 
     }
 }
