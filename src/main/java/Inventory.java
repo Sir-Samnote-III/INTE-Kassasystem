@@ -14,4 +14,9 @@ public class Inventory {
         return stock.getOrDefault(item, 0); 
         //getOrDefault returnerar 0 om varan inte finns i lagret, så testet från cykel 1 fortsätter vara grönt.
     }
+
+    public void removeStock(Item item, int quantity) {
+        stock.put(item, getStock(item) - quantity);
+        //inventory kan ta bort stock
+    }
 }
