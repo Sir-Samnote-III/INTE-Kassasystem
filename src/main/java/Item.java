@@ -2,8 +2,13 @@ public class Item {
 
     private final String name;
     private final Money price;
+    private final Money deposit;
 
-    public Item(String name, Money price){
+    public Item(String name, Money price) {
+        this(name, price, new Money(0, "SEK"));
+    }
+    
+    public Item(String name, Money price, Money deposit){
         if (price == null || price.getValue() < 0) {
             throw new IllegalArgumentException("Price must be zero or positive");
         }
@@ -14,6 +19,7 @@ public class Item {
 
         this.price = price;
         this.name = name;
+        this.deposit = deposit;
     }
 
     public Money getPrice(){
@@ -25,6 +31,6 @@ public class Item {
     }
     
     public Money getDeposit(){
-        return new Money(0, "SEK");
+        return deposit;
     }
 }

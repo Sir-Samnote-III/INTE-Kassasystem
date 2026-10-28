@@ -49,4 +49,10 @@ public class ItemTest {
         Item banana = new Item("Banana", new Money(1000, "SEK"));
         assertEquals(0, banana.getDeposit().getValue());
     }
+
+    @Test 
+    void itemWithDepositReturnsDeposit(){
+        Item soda = new Item("Soda", new Money(1500, "SEK"), new Money(200, "SEK"));
+        assertEquals(200, soda.getDeposit().getValue());
+    }
 }
