@@ -39,7 +39,7 @@ public class Membership {
 
     public long getDaysRemaining(LocalDate datum) {
         if (datum == null) {
-            throw new IllegalArgumentException("Date can not be null");
+            throw new IllegalArgumentException("Date cannot be null");
         }
 
         if (datum.isAfter(slutDatum)) {
@@ -64,6 +64,17 @@ public class Membership {
 
         int gainedPoints = pruchaseAmount.getValue()/50; //2% andel
         totalPoints += gainedPoints;
+    }
+
+    public void redeemPoints(int pointsToRedeem) {
+        if (pointsToRedeem < 0) {
+            throw new IllegalArgumentException("Cannot redeem negative points");
+        }
+        if (pointsToRedeem > this.totalPoints) {
+            throw new IllegalStateException("Not enough points on membership");
+        }
+
+        this.totalPoints -= pointsToRedeem;
     }
 
     public int getPoints() {
