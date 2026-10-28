@@ -7,7 +7,7 @@ public class Inventory {
     // Kopplar varje vara till antalet exemplar i lager.
     private final Map<Item, Integer> stock = new HashMap<>();
     
-    
+
     // Lägger in varor i lagret, t.ex. när en leverans kommer.
     // Antalet måste vara minst 1.
     public void addStock(Item item, int quantity){
@@ -28,15 +28,14 @@ public class Inventory {
     // Tar bort varor från lagret, t.ex. när de säljs.
     // Antalet måste vara minst 1 och får inte vara större än saldot.
     public void removeStock(Item item, int quantity) {
-        if (quantity > getStock(item)) {
-            throw new IllegalStateException("Not enough stock");
-        }
-
         if (quantity <= 0){
             throw new IllegalArgumentException("Quantity must be positive");
         }
-
+        
+        if (quantity > getStock(item)) {
+            throw new IllegalStateException("Not enough stock");
+        }
         stock.put(item, getStock(item) - quantity);
-        //inventory kan ta bort stock 
+    
     }
 }
