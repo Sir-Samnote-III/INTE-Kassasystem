@@ -65,4 +65,16 @@ public class ItemTest {
     void nullDepositThrowsException(){
         assertThrows(IllegalArgumentException.class, () -> new Item("Soda", new Money(1500, "SEK"), null));
     }
+
+    @Test 
+    void priceWithDepositAddsDepositToPrice(){
+        Item soda = new Item("Soda", new Money(1500, "SEK"), new Money(200, "SEK"));
+        assertEquals(1700, soda.getPriceWithDeposit().getValue());
+    }
+
+    @Test 
+    void priceWithDepositEqualsPriceWhenNoDeposit(){
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        assertEquals(1000, banana.getPriceWithDeposit().getValue());
+    }
 }
