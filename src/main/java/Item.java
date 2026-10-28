@@ -17,6 +17,10 @@ public class Item {
             throw new IllegalArgumentException("Name cannot be empty");
         }
 
+        if (deposit == null || deposit.getValue() < 0){
+            throw new IllegalArgumentException("Deposit must be zero or positive");
+        }
+
         this.price = price;
         this.name = name;
         this.deposit = deposit;
