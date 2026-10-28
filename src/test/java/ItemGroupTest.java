@@ -107,4 +107,5 @@ public class ItemGroupTest {
 
         assertThrows(UnsupportedOperationException.class, iterator::remove);
     }
+
 }
