@@ -19,4 +19,11 @@ public class Receipt {
         
         return new Money(total, "SEK");
     }
+
+    //tar bort bara ett exemplar av varan från kvittot och ifall varan finns flera gånger tas bara ett exmplar bort
+    public void removeItem(Item item){
+        if (!items.remove(item)){
+            throw new IllegalArgumentException("Item is not on the receipt");
+        }
+    }
 }
