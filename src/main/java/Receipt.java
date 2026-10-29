@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Receipt {
@@ -25,5 +26,14 @@ public class Receipt {
         if (!items.remove(item)){
             throw new IllegalArgumentException("Item is not on the receipt");
         }
+    }
+
+    // Returnerar en kopia av varorna sorterade i bokstavsordning efter namn.
+    // Kvittots egen lista ändras inte.
+    public List<Item> getItemsSortedByName(){
+        List<Item> sorted = new ArrayList<>(items);
+        sorted.sort(Comparator.comparing(Item::getName, String.CASE_INSENSITIVE_ORDER));
+        return sorted;
+
     }
 }

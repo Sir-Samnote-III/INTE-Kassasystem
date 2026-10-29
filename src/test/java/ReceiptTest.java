@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
 public class ReceiptTest {
     
@@ -42,5 +43,32 @@ public class ReceiptTest {
         Item banana = new Item("Banana", new Money(1000, "SEK"));
 
         assertThrows(IllegalArgumentException.class, () -> receipt.removeItem(banana));
+    }
+
+    //varor ska hämtas sorterade i bokstavsordning efter namn oavsett ordning
+    @Test 
+    void itemsAreSortedByName(){
+        Receipt receipt = new Receipt();
+        Item soda = new Item("Soda", new Money(1500, "SEK"));
+        Item apple = new Item("Apple", new Money(500, "SEK"));
+        Item banana = new Item("Banana", new Money(1000, "SEK"));
+
+        receipt.addItem(soda);
+        receipt.addItem(apple);
+        receipt.addItem(banana);
+
+        assertEquals(List.of(apple, banana, soda), receipt.getItemsSortedByName());
+    }
+
+    //ett test för att sortering inte ska bry sig om stora eller små bokstäver
+    @Test
+    void sortingIgnoresUpperAndLowerCase(){
+        Receipt receipt = new Receipt();
+        Item soda = new Item("Soda", new Money(1500, "SEK"));
+        Item apple = new Item("apple", new Money(500, "SEK"));
+        receipt.addItem(soda);
+        receipt.addItem(apple);
+
+        assertEquals(List.of(apple, soda), receipt.getItemsSortedByName());
     }
 }
