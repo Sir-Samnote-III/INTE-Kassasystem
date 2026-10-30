@@ -125,5 +125,4 @@ public class MembershipTest {
         assertEquals("Not enough points on membership", exception.getMessage());
     }
 
-
 }

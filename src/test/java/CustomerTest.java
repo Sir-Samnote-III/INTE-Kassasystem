@@ -157,4 +157,55 @@ public class CustomerTest {
         assertEquals(500, membership.getPoints());
     }
 
+    @Test 
+    void registerBiggestPurchase() {
+        Customer customer = new Customer("Anna", "A1", "Gatna 2", "200004225432", "0701234567", "anna@gmail.com");
+
+        customer.registreradeKop(new BigDecimal("200.00"));
+
+        assertEquals(0, new BigDecimal("200.00").compareTo(customer.getBiggestPurchase()));
+    }
+
+    @Test
+    void biggestPurchaseGetsUpdated() {
+        Customer customer = new Customer("Anna", "A1", "Gatna 2", "200004225432", "0701234567", "anna@gmail.com"); 
+
+        customer.registreradeKop(new BigDecimal("300.00"));
+        customer.registreradeKop(new BigDecimal("100.00"));
+        customer.registreradeKop(new BigDecimal("600.00"));
+
+        assertEquals(0, new BigDecimal("600.00").compareTo(customer.getBiggestPurchase()));
+    }
+
+    @Test 
+    void registeredPurchasesSaveCurrentDate() {
+        Customer customer = new Customer("Anna", "A1", "Gatna 2", "200004225432", "0701234567", "anna@gmail.com");
+
+        customer.registreradeKop(new BigDecimal("300.00"));
+
+        assertEquals(LocalDate.now(), customer.getLatestPurchase());
+    }
+
+    @Test 
+    void averagePurchasesAreCorrect() {
+        Customer customer = new Customer("Anna", "A1", "Gatna 2", "200004225432", "0701234567", "anna@gmail.com");
+
+        customer.registreradeKop(new BigDecimal("100.00"));
+        customer.registreradeKop(new BigDecimal("200.00"));
+        customer.registreradeKop(new BigDecimal("300.00"));
+
+        assertEquals(0, new BigDecimal("200.00").compareTo(customer.getAveragePruchase()));
+    }
+
+    @Test
+    void invalidBuysDontChangeTheStatistics() {
+        Customer customer = new Customer("Anna", "A1", "Gatna 2", "200004225432", "0701234567", "anna@gmail.com");
+
+        assertThrows(IllegalArgumentException.class, () -> customer.registreradeKop(new BigDecimal("-100.00")));
+
+        assertEquals(0, customer.getAntalKop());
+        assertEquals(0, BigDecimal.ZERO.compareTo(customer.getTotalSumma()));
+
+    }
+
 }
