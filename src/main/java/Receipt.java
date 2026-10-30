@@ -1,10 +1,29 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.time.Clock;
+import java.time.LocalDateTime;
 
 public class Receipt {
     
     private final List<Item> items = new ArrayList<>();
+
+    private final LocalDateTime dateTime;
+
+    //använder datorns riktiga klocka
+    public Receipt(){
+        this(Clock.systemDefaultZone());
+    }
+
+    //konstruktor för tester, klockan skickas in utifrån dependency injection
+    public Receipt(Clock clock){
+        this.dateTime = LocalDateTime.now(clock);
+    }
+
+    //returnerar datum och tid för kvittot
+    public LocalDateTime getDateTime(){
+        return dateTime;
+    }
 
     //lägga till vara på kvittot
     public void addItem(Item item){

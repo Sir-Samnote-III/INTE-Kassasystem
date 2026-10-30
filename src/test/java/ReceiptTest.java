@@ -1,6 +1,10 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 public class ReceiptTest {
     
@@ -70,5 +74,16 @@ public class ReceiptTest {
         receipt.addItem(apple);
 
         assertEquals(List.of(apple, soda), receipt.getItemsSortedByName());
+    }
+
+    //en klocka som står still på 30 okt 2026 kl 14:30, kvittot ska få exakt den tiden så testet ger samma resultat varje gång
+    @Test 
+    void receiptGetsDateAndTimeFromClock(){
+        LocalDateTime fixedTime = LocalDateTime.of(2026, 10, 30, 14, 30);
+        Clock fixedClock = Clock.fixed(fixedTime.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"));
+
+        Receipt receipt = new Receipt(fixedClock);
+
+        assertEquals(fixedTime, receipt.getDateTime());
     }
 }
