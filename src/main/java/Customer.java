@@ -10,7 +10,9 @@ public class Customer {
     private String personnummer;
     private String telefonnummer;
     private String ePostadress;
+    
     private Membership membership;
+    private CustomerRole customerRole;
 
     private int antalKop = 0;
     private BigDecimal totalKopSumma = BigDecimal.ZERO;
@@ -18,10 +20,10 @@ public class Customer {
     private LocalDate latestPruchase;
 
     public Customer(String customerNamn, String customerId, String adress, String personnummer, String telefonnummer, String ePostadress) {
-        this(customerNamn, customerId, adress, personnummer, telefonnummer, ePostadress, null);
+        this(customerNamn, customerId, adress, personnummer, telefonnummer, ePostadress, null, CustomerRole.STANDARD);
     }
 
-    public Customer(String customerNamn, String customerId, String adress, String personnummer, String telefonnummer, String ePostadress, Membership membership) {
+    public Customer(String customerNamn, String customerId, String adress, String personnummer, String telefonnummer, String ePostadress, Membership membership, CustomerRole customerRole) {
         this.customerNamn = customerNamn;
         this.customerId = customerId;
         this.adress = adress;
@@ -29,6 +31,7 @@ public class Customer {
         this.telefonnummer = telefonnummer;
         this.ePostadress = ePostadress;
         this.membership = membership;
+        this.customerRole = customerRole;
     }
 
     public String getCustomerId() {
@@ -55,6 +58,10 @@ public class Customer {
         return ePostadress;
     }
 
+    public CustomerRole getCustomerRole() {
+        return customerRole;
+    }
+
     public int getAntalKop() {
         return antalKop;
     }
@@ -67,7 +74,7 @@ public class Customer {
         return membership;
     }
 
-    public void registreradeKop(BigDecimal belopp) {
+    public void registreradeKop(BigDecimal belopp, boolean isThursday) {
         if (belopp == null || belopp.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Köp summan måste vara större än noll");
         }
@@ -84,7 +91,7 @@ public class Customer {
             int beloppIOren = belopp.movePointRight(2).intValueExact();
 
             Money kopesumma = new Money(beloppIOren, "SEK");
-            membership.registerPoints(kopesumma);
+            membership.registerPoints(kopesumma, customerRole, isThursday);
         }
     }
 

@@ -22,6 +22,11 @@ public class Membership {
     }
 
     public boolean isValid(LocalDate datum) {
+
+        if (datum == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+
         return !datum.isBefore(startDatum) && !datum.isAfter(slutDatum);
     }
 
@@ -57,12 +62,26 @@ public class Membership {
         slutDatum = slutDatum.plusDays(dagar);
     }
 
-    public void registerPoints(Money pruchaseAmount) {
+    public void registerPoints(Money pruchaseAmount, CustomerRole role, boolean isThursday) {
         if (pruchaseAmount == null || pruchaseAmount.getValue() <= 0) {
             throw new IllegalArgumentException("Purchase amount needs to be positive!");
         }
 
-        int gainedPoints = pruchaseAmount.getValue()/50; //2% andel
+        if (role == null) {
+            throw new IllegalArgumentException("Customer role cannot be null");
+        }
+
+        int percentage = 2;
+
+        if (role == CustomerRole.PENSIONER) {
+            percentage = 3;
+        }
+
+        if (role == CustomerRole.STUDENT && isThursday) {
+            percentage = 3;
+        }
+
+        int gainedPoints = (int) ((long) pruchaseAmount.getValue() * percentage / 100);
         totalPoints += gainedPoints;
     }
 
