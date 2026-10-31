@@ -86,4 +86,16 @@ public class ReceiptTest {
 
         assertEquals(fixedTime, receipt.getDateTime());
     }
+
+    @Test
+    void printWritesItemsInOrderAndTotal(){
+        FakePrinter printer = new FakePrinter();
+        Receipt receipt = new Receipt();
+        receipt.addItem(new Item("Soda", new Money(1500, "SEK"), new Money(200, "SEK")));
+        receipt.addItem(new Item("Banana", new Money(1000, "SEK")));
+
+        receipt.print(printer);
+
+        assertEquals(List.of("Banana 10.0", "Soda 17.0", "TOTAL 27.0"), printer.getLines());
+    }
 }

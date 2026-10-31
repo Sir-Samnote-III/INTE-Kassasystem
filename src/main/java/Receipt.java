@@ -55,4 +55,12 @@ public class Receipt {
         return sorted;
 
     }
+
+    // Skriver ut kvittot: en rad per vara i bokstavsordning, sist totalsumman.
+    public void print(ReceiptPrinter printer){
+        for (Item item : getItemsSortedByName()){
+            printer.printLine(item.getName() + " " + item.getPriceWithDeposit().formattedValue());
+        }
+        printer.printLine("TOTAL " + getTotal().formattedValue());
+    }
 }
