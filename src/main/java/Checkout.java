@@ -1,6 +1,8 @@
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.DayOfWeek;
 
 public class Checkout {
     private String baseCurrency;
@@ -64,7 +66,10 @@ public class Checkout {
 
         // Integrera Lukas kundsystem
         if (this.currentCustomer != null) {
-            currentCustomer.registreradeKop(belopp);
+            boolean isThursday =
+            LocalDate.now().getDayOfWeek() == DayOfWeek.THURSDAY;
+
+            currentCustomer.registreradeKop(belopp, isThursday);
         }
 
         // RÄTTELSE 3: Registrera försäljningen på den inloggade personalen!
