@@ -197,7 +197,7 @@ public class CustomerTest {
         assertEquals(0, new BigDecimal("200.00").compareTo(customer.getAveragePruchase()));
     }
 
-    @Test
+    @Test //
     void invalidBuysDontChangeTheStatistics() {
         Customer customer = new Customer("Anna", "A1", "Gatna 2", "200004225432", "0701234567", "anna@gmail.com");
 

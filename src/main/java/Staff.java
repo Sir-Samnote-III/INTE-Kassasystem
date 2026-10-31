@@ -6,6 +6,8 @@ public class Staff {
     private String namn;
     private int amountSale = 0;
     private BigDecimal totalSale = BigDecimal.ZERO;
+    private BigDecimal shiftSale = BigDecimal.ZERO;
+    private int shiftAmountSale = 0;
 
     //regler för bonus kan diskuteras, lägger en för 500kr om personalen säljer för minst 50 000kr i månaden
     private BigDecimal bonusGrans = new BigDecimal("50000.00");
@@ -31,6 +33,22 @@ public class Staff {
 
         totalSale = totalSale.add(amount);
         amountSale++;
+
+        shiftSale = shiftSale.add(amount);
+        shiftAmountSale++;
+    }
+
+    public void resetShift() {
+        shiftSale = BigDecimal.ZERO;
+        shiftAmountSale = 0;
+    }
+
+    public BigDecimal getShiftSale() {
+        return shiftSale;
+    }
+
+    public int getShiftAmountSale() {
+        return shiftAmountSale;
     }
 
     public BigDecimal calculateBonus() {

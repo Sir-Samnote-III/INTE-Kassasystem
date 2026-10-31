@@ -54,7 +54,7 @@ public class MembershipTest {
     }
 
     //ogiltig förlängning bör inte förändra slutdatum
-    @ParameterizedTest 
+    @ParameterizedTest //
     @ValueSource(ints = {0, -1, -10})
     void forandrarInteSlutdatumOmFel(int dagar) {
         Membership membership = new Membership(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31));
@@ -75,7 +75,7 @@ public class MembershipTest {
         assertEquals(50, membership.getPoints());
     }
 
-    @Test
+    @Test //
     void invalidPurchasesGiveNoPoints() {
         Membership membership = new Membership(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31));
 
