@@ -57,9 +57,15 @@ public class Receipt {
     }
 
     // Skriver ut kvittot: en rad per vara i bokstavsordning, sist totalsumman.
+    //Namn längre än 20 tecken kortas av
     public void print(ReceiptPrinter printer){
         for (Item item : getItemsSortedByName()){
-            printer.printLine(item.getName() + " " + item.getPriceWithDeposit().formattedValue());
+            String name = item.getName();
+            if (name.length() > 20){
+                name = name.substring(0, 20);
+            }
+            
+            printer.printLine(name + " " + item.getPriceWithDeposit().formattedValue());
         }
         printer.printLine("TOTAL " + getTotal().formattedValue());
     }

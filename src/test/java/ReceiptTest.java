@@ -98,4 +98,16 @@ public class ReceiptTest {
 
         assertEquals(List.of("Banana 10.0", "Soda 17.0", "TOTAL 27.0"), printer.getLines());
     }
+
+    //Ett för långt varunamn (mer än 20 tecken) ska kortas av till 20 tecken på kvittot.
+    @Test 
+    void longNameCutTo20(){
+        FakePrinter printer = new FakePrinter();
+        Receipt receipt = new Receipt();
+        receipt.addItem(new Item("Extra long chocolate bar", new Money(500, "SEK")));
+        
+        receipt.print(printer);
+
+        assertEquals("Extra long chocolate 5.0", printer.getLines().get(0));
+    }
 }
