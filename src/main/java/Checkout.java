@@ -98,7 +98,7 @@ public class Checkout {
         }
 
         // 1. Be Lukas Membership-klass att dra av poängen (kastar fel om saldot är för lågt)
-        this.currentCustomer.getMembership().redeemPoints(pointsToRedeem);
+        this.currentCustomer.getMembership().removePoints(pointsToRedeem);
 
         // 2. Minska totalbeloppet i kassan (Eftersom er uträkning ger att 1 poäng = 1 öre)
         long newTotal = Math.max(0, currentTotal.getValue() - pointsToRedeem);

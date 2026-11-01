@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MembershipTest {
 
     @Test
-    void giltigtMedlemskap() {
+    void validMembership() {
         Membership membership = new Membership(
             LocalDate.of(2026, 3, 9),
             LocalDate.of(2026, 12, 31)
@@ -19,7 +19,7 @@ public class MembershipTest {
     }
 
     @Test
-    void medlemskapOgiltigForeStart() {
+    void membershipInvalidBeforeStart() {
         Membership membership = new Membership(
             LocalDate.of(2026, 1, 1),
             LocalDate.of(2026, 12, 31)
@@ -29,7 +29,7 @@ public class MembershipTest {
     }
 
     @Test
-    void medlemskapOgiltigEfterSlut() {
+    void membershipInvalidAfterEnd() {
         Membership membership = new Membership(
             LocalDate.of(2026, 2, 9),
             LocalDate.of(2026, 12, 31)
@@ -39,7 +39,27 @@ public class MembershipTest {
     }
 
     @Test
-    void forlangMedlemskap() {
+    void isValidWithNullDateThrowsException() {
+        Membership membership = new Membership(
+            LocalDate.of(2026, 1, 1),
+            LocalDate.of(2026, 12, 31)
+        );
+
+        assertThrows(IllegalArgumentException.class, () -> membership.isValid(null));
+    }
+
+    @Test
+    void isValidTodayReturnsTrueForValidMembership() {
+        Membership membership = new Membership(
+            LocalDate.now().minusDays(1),
+            LocalDate.now().plusDays(1)
+        );
+
+        assertTrue(membership.isValidToday());
+    }
+
+    @Test
+    void extendMembership() {
         Membership membership = new Membership(
             LocalDate.of(2026, 1, 1),
             LocalDate.of(2026, 12, 31)
@@ -47,11 +67,11 @@ public class MembershipTest {
 
         membership.extend(30);
 
-        assertEquals(LocalDate.of(2027, 1, 30), membership.getSlutDatum());
+        assertEquals(LocalDate.of(2027, 1, 30), membership.getEndDate());
     }
 
     @Test
-    void aterStaendeDagarRaknasKorrekt() {
+    void remainingDaysCalculatedCorrectly() {
         Membership membership = new Membership(
             LocalDate.of(2026, 1, 1),
             LocalDate.of(2026, 1, 10)
@@ -61,7 +81,17 @@ public class MembershipTest {
     }
 
     @Test
-    void slutDatumForeStartArFel() {
+    void getDaysRemainingWithNullDateThrowsException() {
+        Membership membership = new Membership(
+            LocalDate.of(2026, 1, 1),
+            LocalDate.of(2026, 1, 10)
+        );
+
+        assertThrows(IllegalArgumentException.class, () -> membership.getDaysRemaining(null));
+    }
+
+    @Test
+    void endDateBeforeStartThrowsException() {
         assertThrows(
             IllegalArgumentException.class,
             () -> new Membership(
@@ -71,19 +101,32 @@ public class MembershipTest {
         );
     }
 
-    @ParameterizedTest //
+    @Test
+    void nullDatesInConstructorThrowException() {
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new Membership(null, LocalDate.of(2026, 12, 31))
+        );
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new Membership(LocalDate.of(2026, 1, 1), null)
+        );
+    }
+
+    @ParameterizedTest
     @ValueSource(ints = {0, -1, -10})
-    void forandrarInteSlutdatumOmFel(int dagar) {
+    void endDateUnchangedWhenExtensionIsInvalid(int days) {
         Membership membership = new Membership(
             LocalDate.of(2026, 1, 1),
             LocalDate.of(2026, 12, 31)
         );
 
-        LocalDate ursprungligtSlutdatum = membership.getSlutDatum();
+        LocalDate originalEndDate = membership.getEndDate();
 
-        assertThrows(IllegalArgumentException.class, () -> membership.extend(dagar));
+        assertThrows(IllegalArgumentException.class, () -> membership.extend(days));
 
-        assertEquals(ursprungligtSlutdatum, membership.getSlutDatum());
+        assertEquals(originalEndDate, membership.getEndDate());
     }
 
     @Test
@@ -160,6 +203,32 @@ public class MembershipTest {
     }
 
     @Test
+    void registerPointsWithNullPurchaseThrowsException() {
+        Membership membership = new Membership(
+            LocalDate.of(2026, 1, 1),
+            LocalDate.of(2026, 12, 31)
+        );
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> membership.registerPoints(null, CustomerRole.STANDARD, false)
+        );
+    }
+
+    @Test
+    void registerPointsWithNullRoleThrowsException() {
+        Membership membership = new Membership(
+            LocalDate.of(2026, 1, 1),
+            LocalDate.of(2026, 12, 31)
+        );
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> membership.registerPoints(new Money(10000, "SEK"), null, false)
+        );
+    }
+
+    @Test
     void pointsFromMultiplePurchases() {
         Membership membership = new Membership(
             LocalDate.of(2026, 1, 1),
@@ -182,40 +251,93 @@ public class MembershipTest {
     }
 
     @Test
-    void redeemPointsShouldDeductPoints() {
+    void removePointsShouldDeductPoints() {
         Membership membership = new Membership(
             LocalDate.now(),
             LocalDate.now().plusYears(1)
         );
 
-        Money purchase = new Money(5000, "SEK");
         membership.registerPoints(
-            purchase,
+            new Money(5000, "SEK"),
             CustomerRole.STANDARD,
             false
         );
 
-        membership.redeemPoints(40);
+        membership.removePoints(40);
 
         assertEquals(60, membership.getPoints());
     }
 
     @Test
-    void redeemPointsShouldThrowExceptionIfInsufficientPoints() {
+    void removePointsThrowsExceptionWhenInsufficientPoints() {
         Membership membership = new Membership(
             LocalDate.now(),
             LocalDate.now().plusYears(1)
         );
 
-        Money purchase = new Money(1000, "SEK");
         membership.registerPoints(
-            purchase,
+            new Money(1000, "SEK"),
             CustomerRole.STANDARD,
             false
         );
 
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> membership.redeemPoints(50));
+        IllegalStateException exception = assertThrows(
+            IllegalStateException.class,
+            () -> membership.removePoints(50)
+        );
 
         assertEquals("Not enough points on membership", exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, -1, -10})
+    void removePointsWithInvalidAmountThrowsException(int points) {
+        Membership membership = new Membership(
+            LocalDate.now(),
+            LocalDate.now().plusYears(1)
+        );
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> membership.removePoints(points)
+        );
+    }
+
+    @Test
+    void getBonusReturnsOnlyCompleteBonusIntervals() {
+        Membership membership = new Membership(
+            LocalDate.now(),
+            LocalDate.now().plusYears(1)
+        );
+
+        membership.registerPoints(
+            new Money(3750, "SEK"),
+            CustomerRole.STANDARD,
+            false
+        );
+
+        Money bonus = membership.getBonus();
+
+        assertEquals(50, bonus.getValue());
+        assertEquals(75, membership.getPoints());
+    }
+
+    @Test
+    void getBonusDoesNotDeductPoints() {
+        Membership membership = new Membership(
+            LocalDate.now(),
+            LocalDate.now().plusYears(1)
+        );
+
+        membership.registerPoints(
+            new Money(5000, "SEK"),
+            CustomerRole.STANDARD,
+            false
+        );
+
+        Money bonus = membership.getBonus();
+
+        assertEquals(100, bonus.getValue());
+        assertEquals(100, membership.getPoints());
     }
 }

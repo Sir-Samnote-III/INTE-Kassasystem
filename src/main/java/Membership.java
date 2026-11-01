@@ -2,68 +2,73 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class Membership {
-    
-    private LocalDate startDatum;
-    private LocalDate slutDatum;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
     private int totalPoints = 0;
 
-    public Membership(LocalDate startDatum, LocalDate slutDatum) {
-        
-        if (startDatum == null || slutDatum == null) {
+    private static final int BASE_POINTS = 50;
+
+    public Membership(LocalDate startDate, LocalDate endDate) {
+
+        if (startDate == null || endDate == null) {
             throw new IllegalArgumentException("Start and end date cannot be null");
         }
 
-        if (slutDatum.isBefore(startDatum)) {
+        if (endDate.isBefore(startDate)) {
             throw new IllegalArgumentException("End date cannot be before start date");
         }
-        
-        this.startDatum = startDatum;
-        this.slutDatum = slutDatum;
+
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    public boolean isValid(LocalDate datum) {
+    public boolean isValid(LocalDate date) {
 
-        if (datum == null) {
+        if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");
         }
 
-        return !datum.isBefore(startDatum) && !datum.isAfter(slutDatum);
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
 
-    public boolean isValidToday(LocalDate datum) {
+    public boolean isValidToday() {
         return isValid(LocalDate.now());
     }
 
-    public LocalDate getStartDatum() {
-        return startDatum;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public LocalDate getSlutDatum() {
-        return slutDatum;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public long getDaysRemaining(LocalDate datum) {
-        if (datum == null) {
+    public int getDaysRemaining(LocalDate date) {
+
+        if (date == null) {
             throw new IllegalArgumentException("Date cannot be null");
         }
 
-        if (datum.isAfter(slutDatum)) {
+        if (date.isAfter(endDate)) {
             return 0;
         }
 
-        return ChronoUnit.DAYS.between(datum, slutDatum); 
+        return (int) ChronoUnit.DAYS.between(date, endDate);
     }
 
-    public void extend(int dagar) {
-        if (dagar <= 0) {
+    public void extend(int days) {
+
+        if (days <= 0) {
             throw new IllegalArgumentException("Number of days needs to be positive");
         }
 
-        slutDatum = slutDatum.plusDays(dagar);
+        endDate = endDate.plusDays(days);
     }
 
-    public void registerPoints(Money pruchaseAmount, CustomerRole role, boolean isThursday) {
-        if (pruchaseAmount == null || pruchaseAmount.getValue() <= 0) {
+    public void registerPoints(Money purchaseAmount, CustomerRole role, boolean isThursday) {
+
+        if (purchaseAmount == null || purchaseAmount.getValue() <= 0) {
             throw new IllegalArgumentException("Purchase amount needs to be positive!");
         }
 
@@ -81,28 +86,31 @@ public class Membership {
             percentage = 3;
         }
 
-        long gainedPoints = (int) ((long) pruchaseAmount.getValue() * percentage / 100);
+        int gainedPoints = (int) ((long) purchaseAmount.getValue() * percentage / 100);
 
         totalPoints += gainedPoints;
     }
 
-    public void redeemPoints(int pointsToRedeem) {
-        if (pointsToRedeem < 0) {
-            throw new IllegalArgumentException("Cannot redeem negative points");
+    public void removePoints(int pointsToRemove) {
+
+        if (pointsToRemove <= 0) {
+            throw new IllegalArgumentException("Points to remove must be positive");
         }
-        if (pointsToRedeem > this.totalPoints) {
+
+        if (pointsToRemove > totalPoints) {
             throw new IllegalStateException("Not enough points on membership");
         }
 
-        this.totalPoints -= pointsToRedeem;
+        totalPoints -= pointsToRemove;
     }
 
     public int getPoints() {
         return totalPoints;
     }
 
-    public Money getBonus(Currency currency) {
-        return new Money(totalPoints, currency);
-    }
 
+    public Money getBonus(Currency currency) {
+        int bonusAmount = (totalPoints / BASE_POINTS) * BASE_POINTS;
+        return new Money(bonusAmount, currency);
+    }
 }
