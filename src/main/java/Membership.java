@@ -86,7 +86,7 @@ public class Membership {
             percentage = 3;
         }
 
-        int gainedPoints = (int) ((long) purchaseAmount.getValue() * percentage / 100);
+        int gainedPoints = (int) (purchaseAmount.getValue() * percentage / 100);
 
         totalPoints += gainedPoints;
     }
@@ -110,7 +110,7 @@ public class Membership {
 
 
     public Money getBonus(Currency currency) {
-        int bonusAmount = (totalPoints / BASE_POINTS) * BASE_POINTS;
+        long bonusAmount = (totalPoints / BASE_POINTS) * BASE_POINTS;
         return new Money(bonusAmount, currency);
     }
 }

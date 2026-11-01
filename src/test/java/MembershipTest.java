@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MembershipTest {
 
+    private final Currency sek = new Currency(CurrencyCode.SEK, "Swedish Krona", "kr", 1.0);
+
     @Test
     void validMembership() {
         Membership membership = new Membership(
@@ -104,14 +106,10 @@ public class MembershipTest {
     @Test
     void nullDatesInConstructorThrowException() {
         assertThrows(
-            IllegalArgumentException.class,
-            () -> new Membership(null, LocalDate.of(2026, 12, 31))
-        );
+            IllegalArgumentException.class, () -> new Membership(null, LocalDate.of(2026, 12, 31)));
 
         assertThrows(
-            IllegalArgumentException.class,
-            () -> new Membership(LocalDate.of(2026, 1, 1), null)
-        );
+            IllegalArgumentException.class, () -> new Membership(LocalDate.of(2026, 1, 1), null));
     }
 
     @ParameterizedTest
@@ -137,7 +135,7 @@ public class MembershipTest {
         );
 
         membership.registerPoints(
-            new Money(2500, "SEK"),
+            new Money(2500L, sek),
             CustomerRole.STANDARD,
             false
         );
@@ -153,7 +151,7 @@ public class MembershipTest {
         );
 
         membership.registerPoints(
-            new Money(10000, "SEK"),
+            new Money(10000L, sek),
             CustomerRole.PENSIONER,
             false
         );
@@ -169,7 +167,7 @@ public class MembershipTest {
         );
 
         membership.registerPoints(
-            new Money(10000, "SEK"),
+            new Money(10000L, sek),
             CustomerRole.STUDENT,
             true
         );
@@ -185,7 +183,7 @@ public class MembershipTest {
         );
 
         membership.registerPoints(
-            new Money(10000, "SEK"),
+            new Money(10000L, sek),
             CustomerRole.STANDARD,
             false
         );
@@ -193,7 +191,7 @@ public class MembershipTest {
         assertThrows(
             IllegalArgumentException.class,
             () -> membership.registerPoints(
-                new Money(-2000, "SEK"),
+                new Money(-2000L, sek),
                 CustomerRole.STANDARD,
                 false
             )
@@ -210,9 +208,7 @@ public class MembershipTest {
         );
 
         assertThrows(
-            IllegalArgumentException.class,
-            () -> membership.registerPoints(null, CustomerRole.STANDARD, false)
-        );
+            IllegalArgumentException.class, () -> membership.registerPoints(null, CustomerRole.STANDARD, false));
     }
 
     @Test
@@ -224,7 +220,7 @@ public class MembershipTest {
 
         assertThrows(
             IllegalArgumentException.class,
-            () -> membership.registerPoints(new Money(10000, "SEK"), null, false)
+            () -> membership.registerPoints(new Money(10000L, sek), null, false)
         );
     }
 
@@ -236,13 +232,13 @@ public class MembershipTest {
         );
 
         membership.registerPoints(
-            new Money(45300, "SEK"),
+            new Money(45300L, sek),
             CustomerRole.STANDARD,
             false
         );
 
         membership.registerPoints(
-            new Money(98000, "SEK"),
+            new Money(98000L, sek),
             CustomerRole.STANDARD,
             false
         );
@@ -258,7 +254,7 @@ public class MembershipTest {
         );
 
         membership.registerPoints(
-            new Money(5000, "SEK"),
+            new Money(5000L, sek),
             CustomerRole.STANDARD,
             false
         );
@@ -276,7 +272,7 @@ public class MembershipTest {
         );
 
         membership.registerPoints(
-            new Money(1000, "SEK"),
+            new Money(1000L, sek),
             CustomerRole.STANDARD,
             false
         );
@@ -292,15 +288,9 @@ public class MembershipTest {
     @ParameterizedTest
     @ValueSource(ints = {0, -1, -10})
     void removePointsWithInvalidAmountThrowsException(int points) {
-        Membership membership = new Membership(
-            LocalDate.now(),
-            LocalDate.now().plusYears(1)
-        );
+        Membership membership = new Membership(LocalDate.now(), LocalDate.now().plusYears(1));
 
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> membership.removePoints(points)
-        );
+        assertThrows(IllegalArgumentException.class, () -> membership.removePoints(points));
     }
 
     @Test
@@ -311,14 +301,14 @@ public class MembershipTest {
         );
 
         membership.registerPoints(
-            new Money(3750, "SEK"),
+            new Money(3750L, sek),
             CustomerRole.STANDARD,
             false
         );
 
-        Money bonus = membership.getBonus();
+        Money bonus = membership.getBonus(sek);
 
-        assertEquals(50, bonus.getValue());
+        assertEquals(50L, bonus.getValue());
         assertEquals(75, membership.getPoints());
     }
 
@@ -330,14 +320,14 @@ public class MembershipTest {
         );
 
         membership.registerPoints(
-            new Money(5000, "SEK"),
+            new Money(5000L, sek),
             CustomerRole.STANDARD,
             false
         );
 
-        Money bonus = membership.getBonus();
+        Money bonus = membership.getBonus(sek);
 
-        assertEquals(100, bonus.getValue());
+        assertEquals(100L, bonus.getValue());
         assertEquals(100, membership.getPoints());
     }
 }
