@@ -9,6 +9,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ItemGroupTest {
+    
+    // Svensk krona som används i alla tester (växelkurs 1.0 eftersom sek är basvalutan).
+    private final Currency sek = new Currency(CurrencyCode.sek, "Svensk krona", "kr", 1.0);
+
     @Test 
     void newGroupIsEmpty(){
         ItemGroup fruit = new ItemGroup("Fruit");
@@ -18,14 +22,14 @@ public class ItemGroupTest {
     @Test 
     void addingItemIncreasesSize(){
         ItemGroup fruit = new ItemGroup("Fruit");
-        fruit.add(new Item("Banana", new Money(1000, "SEK")));
+        fruit.add(new Item("Banana", new Money(1000, "sek")));
         assertEquals(1, fruit.size());
     }
 
     @Test 
     void groupContainsAddedItem(){
         ItemGroup fruit = new ItemGroup("Fruit");
-        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        Item banana = new Item("Banana", new Money(1000, "sek"));
         fruit.add(banana);
         assertTrue(fruit.contains(banana));
     }
@@ -33,14 +37,14 @@ public class ItemGroupTest {
     @Test 
     void groupDoesNotContainItemThatWasNotAdded(){
         ItemGroup fruit = new ItemGroup("Fruit");
-        Item apple = new Item("Apple", new Money(500, "SEK"));
+        Item apple = new Item("Apple", new Money(500, "sek"));
         assertFalse(fruit.contains(apple));
     }
 
     @Test 
     void removingItemDecreasesSize(){
         ItemGroup fruit = new ItemGroup("Fruit");
-        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        Item banana = new Item("Banana", new Money(1000, "sek"));
         fruit.add(banana);
 
         fruit.remove(banana);
@@ -52,7 +56,7 @@ public class ItemGroupTest {
     @Test
     void removingItemNotInGroupThrowsException(){
         ItemGroup fruit = new ItemGroup("Fruit");
-        Item apple = new Item("Apple", new Money(500, "SEK"));
+        Item apple = new Item("Apple", new Money(500, "sek"));
 
         assertThrows(IllegalArgumentException.class, () -> fruit.remove(apple));
     }
@@ -60,7 +64,7 @@ public class ItemGroupTest {
     @Test 
     void addingSameItemTwiceCountsOnce(){
         ItemGroup fruit = new ItemGroup("Fruit");
-        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        Item banana = new Item("Banana", new Money(1000, "sek"));
 
         fruit.add(banana);
         fruit.add(banana);
@@ -84,8 +88,8 @@ public class ItemGroupTest {
     @Test 
     void canIterateOverItemsInOrder(){
         ItemGroup fruit = new ItemGroup("Fruit");
-        Item banana = new Item("Banana", new Money(1000, "SEK"));
-        Item apple = new Item("Apple", new Money(500, "SEK"));
+        Item banana = new Item("Banana", new Money(1000, "sek"));
+        Item apple = new Item("Apple", new Money(500, "sek"));
         fruit.add(banana);
         fruit.add(apple);
 
@@ -100,7 +104,7 @@ public class ItemGroupTest {
     @Test
     void iteratorDoesNotAllowRemoval(){
         ItemGroup fruit = new ItemGroup("Fruit");
-        fruit.add(new Item("Banana", new Money(1000, "SEK")));
+        fruit.add(new Item("Banana", new Money(1000, "sek")));
 
         Iterator<Item> iterator = fruit.iterator();
         iterator.next();

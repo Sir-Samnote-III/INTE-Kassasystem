@@ -8,10 +8,13 @@ import java.time.ZoneOffset;
 
 public class ReceiptTest {
     
+    // Svensk krona som används i alla tester (växelkurs 1.0 eftersom sek är basvalutan).
+    private final Currency sek = new Currency(CurrencyCode.sek, "Svensk krona", "kr", 1.0);
+
     //ett nytt kvitto utan varor ska ha totalsumman 0 kr
     @Test 
     void newReceipt0Total(){
-        Receipt receipt = new Receipt();
+        Receipt receipt = new Receipt(sek);
         assertEquals(0, receipt.getTotal().getValue());
     }
 
@@ -19,9 +22,9 @@ public class ReceiptTest {
     // banan 10kr, läsk 15kr med 2 kr pant ska bli 27 kr.
     @Test 
     void totalPriceWithDeposit(){
-        Receipt receipt = new Receipt();
-        receipt.addItem(new Item("Banana", new Money(1000, "SEK")));
-        receipt.addItem(new Item("Soda", new Money(1500, "SEK"), new Money(200, "SEK")));
+        Receipt receipt = new Receipt(sek);
+        receipt.addItem(new Item("Banana", new Money(1000, "sek")));
+        receipt.addItem(new Item("Soda", new Money(1500, "sek"), new Money(200, "sek")));
 
         assertEquals(2700, receipt.getTotal().getValue());
     }
@@ -30,8 +33,8 @@ public class ReceiptTest {
     //två läsk 15 kr ink pant blir 34kr. Vi tar bort en så ska det va 17kr kvar
     @Test
     void removingItemRemovesOnlyOneCopy(){
-        Receipt receipt = new Receipt();
-        Item soda = new Item("Soda", new Money(1500, "SEK"), new Money(200, "SEK"));
+        Receipt receipt = new Receipt(sek);
+        Item soda = new Item("Soda", new Money(1500, "sek"), new Money(200, "sek"));
         receipt.addItem(soda);
         receipt.addItem(soda);
 
@@ -43,8 +46,8 @@ public class ReceiptTest {
     //att ta bort en vara som inte finns med på kvittot ska ge undantag
     @Test
     void removingNonExistingItem(){
-        Receipt receipt = new Receipt();
-        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        Receipt receipt = new Receipt(sek);
+        Item banana = new Item("Banana", new Money(1000, "sek"));
 
         assertThrows(IllegalArgumentException.class, () -> receipt.removeItem(banana));
     }
@@ -52,10 +55,10 @@ public class ReceiptTest {
     //varor ska hämtas sorterade i bokstavsordning efter namn oavsett ordning
     @Test 
     void itemsAreSortedByName(){
-        Receipt receipt = new Receipt();
-        Item soda = new Item("Soda", new Money(1500, "SEK"));
-        Item apple = new Item("Apple", new Money(500, "SEK"));
-        Item banana = new Item("Banana", new Money(1000, "SEK"));
+        Receipt receipt = new Receipt(sek);
+        Item soda = new Item("Soda", new Money(1500, "sek"));
+        Item apple = new Item("Apple", new Money(500, "sek"));
+        Item banana = new Item("Banana", new Money(1000, "sek"));
 
         receipt.addItem(soda);
         receipt.addItem(apple);
@@ -67,9 +70,9 @@ public class ReceiptTest {
     //ett test för att sortering inte ska bry sig om stora eller små bokstäver
     @Test
     void sortingIgnoresUpperAndLowerCase(){
-        Receipt receipt = new Receipt();
-        Item soda = new Item("Soda", new Money(1500, "SEK"));
-        Item apple = new Item("apple", new Money(500, "SEK"));
+        Receipt receipt = new Receipt(sek);
+        Item soda = new Item("Soda", new Money(1500, "sek"));
+        Item apple = new Item("apple", new Money(500, "sek"));
         receipt.addItem(soda);
         receipt.addItem(apple);
 
@@ -82,7 +85,7 @@ public class ReceiptTest {
         LocalDateTime fixedTime = LocalDateTime.of(2026, 10, 30, 14, 30);
         Clock fixedClock = Clock.fixed(fixedTime.toInstant(ZoneOffset.UTC), ZoneId.of("UTC"));
 
-        Receipt receipt = new Receipt(fixedClock);
+        Receipt receipt = Receipt(fixedClock, sek);
 
         assertEquals(fixedTime, receipt.getDateTime());
     }
@@ -90,9 +93,9 @@ public class ReceiptTest {
     @Test
     void printWritesItemsInOrderAndTotal(){
         FakePrinter printer = new FakePrinter();
-        Receipt receipt = new Receipt();
-        receipt.addItem(new Item("Soda", new Money(1500, "SEK"), new Money(200, "SEK")));
-        receipt.addItem(new Item("Banana", new Money(1000, "SEK")));
+        Receipt receipt = new Receipt(sek);
+        receipt.addItem(new Item("Soda", new Money(1500, "sek"), new Money(200, "sek")));
+        receipt.addItem(new Item("Banana", new Money(1000, "sek")));
 
         receipt.print(printer);
 
@@ -103,8 +106,8 @@ public class ReceiptTest {
     @Test 
     void longNameCutTo20(){
         FakePrinter printer = new FakePrinter();
-        Receipt receipt = new Receipt();
-        receipt.addItem(new Item("Extra long chocolate bar", new Money(500, "SEK")));
+        Receipt receipt = new Receipt(sek);
+        receipt.addItem(new Item("Extra long chocolate bar", new Money(500, "sek")));
         
         receipt.print(printer);
 
