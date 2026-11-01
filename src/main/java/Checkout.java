@@ -9,6 +9,7 @@ public class Checkout {
     private Staff activeStaff;
     private Customer currentCustomer; // Kunden som gör köpet
     private AgeControl ageControl;
+    private Inventory inventory;
 
     private List<Item> scannedItems;
     private Money currentTotal;
@@ -30,6 +31,11 @@ public class Checkout {
     // Möjliggör inloggning av personal
     public void setActiveStaff(Staff staff) {
         this.activeStaff = staff;
+    }
+
+    // Kopplar kassan till butikens lager, så att lagersaldot minskar när något köps.
+    public void attachInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     // Kopplar ett medlemskap/kund till det aktuella köpet
@@ -72,6 +78,13 @@ public class Checkout {
         }
 
         Money change = changeCalculator.calculateChange(currentTotal, payment);
+
+        // Minska lagersaldot med en för varje köpt vara (om kassan är kopplad till ett lager).
+        if (this.inventory != null) {
+            for (Item item : scannedItems) {
+                inventory.removeStock(item, 1);
+            }   
+        }
 
         // Omvandla totalen från ören (int) till kronor (BigDecimal) för att matcha era metoder
         BigDecimal belopp = BigDecimal.valueOf(currentTotal.getValue()).movePointLeft(2);

@@ -46,4 +46,36 @@ public class CheckoutTest {
         assertEquals(1, staff.getAmountSale());
         assertEquals(new BigDecimal("100.00"), staff.getTotalSale());
     }
+
+    // Lagret ska uppdateras automatiskt när något köps:
+    // 10 läsk i lager, kunden köper 2 → 8 kvar efter betalning.
+    @Test
+    void pay_ShouldReduceStockInInventory() {
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr", 1.0);
+        Checkout checkout = new Checkout(sek, new Staff("S03", "Mohammad"));
+        Inventory inventory = new Inventory();
+        Item soda = new Item("Läsk", new Money(1500L, sek), new Money(200L, sek));
+        inventory.addStock(soda, 10);
+        checkout.attachInventory(inventory);
+
+        checkout.scanItem(soda, soda);
+        checkout.pay(new Money(5000L, sek));
+
+        assertEquals(8, inventory.getStock(soda));
+    }
+
+    // Lagret ska inte ändras förrän kunden har betalat.
+    @Test
+    void scanItem_ShouldNotChangeStockBeforePayment() {
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr", 1.0);
+        Checkout checkout = new Checkout(sek, new Staff("S03", "Mohammad"));
+        Inventory inventory = new Inventory();
+        Item soda = new Item("Läsk", new Money(1500L, sek), new Money(200L, sek));
+        inventory.addStock(soda, 10);
+        checkout.attachInventory(inventory);
+
+        checkout.scanItem(soda);
+
+        assertEquals(10, inventory.getStock(soda));
+    }
 }
