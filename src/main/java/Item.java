@@ -3,13 +3,18 @@ public class Item {
     private final String name;
     private final Money price;
     private final Money deposit;
-    //kommer behöva en private final int ageLimit och den bör anpassas med denna klass
+    private final int ageLimit;
 
     public Item(String name, Money price) {
         this(name, price, price == null ? null : new Money(0, price.getCurrency()));
     }
-    
+
+    //vara med pant fast utan åldersgräns
     public Item(String name, Money price, Money deposit){
+        this(name, price, deposit, ProductAgeLimits.NO_AGE_LIMIT);
+    }
+    
+    public Item(String name, Money price, Money deposit, int ageLimit){
         if (price == null || price.getValue() < 0) {
             throw new IllegalArgumentException("Price must be zero or positive");
         }
@@ -21,10 +26,14 @@ public class Item {
         if (deposit == null || deposit.getValue() < 0){
             throw new IllegalArgumentException("Deposit must be zero or positive");
         }
+        if (ageLimit < 0){
+            throw new IllegalArgumentException("Age limit cannot be negative");
+        }
 
         this.price = price;
         this.name = name;
         this.deposit = deposit;
+        this.ageLimit = ageLimit;
     }
 
     public Money getPrice(){
@@ -37,6 +46,10 @@ public class Item {
     
     public Money getDeposit(){
         return deposit;
+    }
+
+    public int getAgeLimit(){
+        return ageLimit;
     }
 
     public Money getPriceWithDeposit(){
