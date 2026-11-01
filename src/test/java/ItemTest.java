@@ -80,4 +80,25 @@ public class ItemTest {
         Item banana = new Item("Banana", new Money(1000, sek));
         assertEquals(1000, banana.getPriceWithDeposit().getValue());
     }
+
+    // En vara utan åldersgräns (t.ex. banan) ska ha åldersgräns 0.
+    @Test
+    void itemWithoutAgeLimitHasNoAgeLimit() {
+        Item banana = new Item("Banana", new Money(1000, sek));
+        assertEquals(ProductAgeLimits.NO_AGE_LIMIT, banana.getAgeLimit());
+    }
+
+    // En vara med åldersgräns (t.ex. öl, 20 år) ska returnera den.
+    @Test
+    void itemWithAgeLimitReturnsAgeLimit() {
+        Item beer = new Item("Beer", new Money(2500, sek), new Money(100, sek), ProductAgeLimits.ALCOHOL);
+        assertEquals(20, beer.getAgeLimit());
+    }
+
+    // Gränsvärde: en negativ åldersgräns är ogiltig och ska ge undantag.
+    @Test
+    void negativeAgeLimitThrowsException() {
+        assertThrows(IllegalArgumentException.class,
+        () -> new Item("Beer", new Money(2500, sek), new Money(100, sek), -1));
+    }
 }
