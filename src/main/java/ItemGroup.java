@@ -4,11 +4,6 @@ import java.util.Set;
 import java.util.Collections;
 
 public class ItemGroup implements Iterable<Item> {
-    
-    @Override
-    public Iterator<Item> iterator() {
-        return Collections.unmodifiableSet(items).iterator();
-    }
 
     private final String name;
     private final Set<Item> items = new LinkedHashSet<>();
@@ -27,6 +22,10 @@ public class ItemGroup implements Iterable<Item> {
         items.add(item);
     }
 
+    public String getName(){
+        return name;
+    }
+
     public int size(){
         return items.size();
     }
@@ -39,5 +38,10 @@ public class ItemGroup implements Iterable<Item> {
         if (!items.remove(item)){
             throw new IllegalArgumentException("Item is not in the group");
         }
+    }
+
+    @Override
+    public Iterator<Item> iterator() {
+        return Collections.unmodifiableSet(items).iterator();
     }
 }

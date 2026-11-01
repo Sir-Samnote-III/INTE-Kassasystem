@@ -112,4 +112,11 @@ public class ItemGroupTest {
         assertThrows(UnsupportedOperationException.class, iterator::remove);
     }
 
+    // Gruppens namn ska gå att hämta, t.ex. för att visa det på ett kvitto eller i statistik.
+    @Test
+    void groupNameCanBeRetrieved() {
+        ItemGroup fruit = new ItemGroup("Fruit");
+        assertEquals("Fruit", fruit.getName());
+    }
+
 }
