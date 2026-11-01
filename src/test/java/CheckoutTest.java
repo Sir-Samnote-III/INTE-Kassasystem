@@ -1,13 +1,16 @@
 import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class CheckoutTest {
 
     @Test
     void scanItem_ShouldIncludeDepositInTotal() {
-// 1. Skapa valuta-objektet
-        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
+        // 1. Skapa valuta-objektet
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr", 1.0);
 
         Staff staff = new Staff("S01", "Antonios");
         // 2. Skicka in objektet (sek), inte CurrencyCode.SEK
@@ -18,7 +21,7 @@ public class CheckoutTest {
         Money deposit = new Money(200L, sek);
         Item soda = new Item("Läsk", price, deposit);
 
-        checkout.scanItem(soda);
+        checkout.scanItem(LocalDate.of(2000, 1, 1), soda);
 
         assertEquals(1700L, checkout.getTotal().getValue());
     }
@@ -35,7 +38,7 @@ public class CheckoutTest {
         Customer customer = new Customer("Test Testsson", "CUST-01", "Gata 1", "900101-1234", "070123", "test@test.se");
         checkout.attachCustomer(customer);
 
-        checkout.scanItem(new Item("Jacka", new Money(10000L, sek)));
+        checkout.scanItem(LocalDate.of(2000, 1, 1), new Item("Jacka", new Money(10000L, sek)));
 
         Money payment = new Money(10000L, sek);
         checkout.pay(payment);
@@ -58,7 +61,7 @@ public class CheckoutTest {
         inventory.addStock(soda, 10);
         checkout.attachInventory(inventory);
 
-        checkout.scanItem(soda, soda);
+        checkout.scanItem(LocalDate.of(2000, 1, 1), soda, soda);
         checkout.pay(new Money(5000L, sek));
 
         assertEquals(8, inventory.getStock(soda));
@@ -74,8 +77,38 @@ public class CheckoutTest {
         inventory.addStock(soda, 10);
         checkout.attachInventory(inventory);
 
-        checkout.scanItem(soda);
+        checkout.scanItem(LocalDate.of(2000, 1, 1), soda);
 
         assertEquals(10, inventory.getStock(soda));
+    }
+
+    @Test 
+    void customerUnderAgeCannotBuyEnergyDrink() {
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr", 1.0);
+
+        Checkout checkout = new Checkout(sek, new Staff("S01", "Filip"));
+
+        Item energyDrink = new Item("Energy drink", new Money(2000L, sek), new Money(0L, sek), ProductAgeLimits.ENERGY_DRINK);
+
+        assertThrows(IllegalStateException.class, 
+            () -> checkout.scanItem(LocalDate.of(2012, 1, 2), energyDrink));
+
+        assertEquals(0L, checkout.getTotal().getValue());
+    }
+
+    @Test 
+    void customerMeetsAgeRequirementCanBuyAlcohol() {
+        Currency euro = new Currency(CurrencyCode.EUR, "Euro", "€", 1.0);
+
+        Checkout checkout = new Checkout(euro, new Staff("S01", "Mattias"));
+
+        Item alcohol = new Item("Alcohol", new Money(5000l, euro), new Money(0L, euro), ProductAgeLimits.ALCOHOL);
+
+        LocalDate birthDate = LocalDate.now().minusYears(20);
+
+        checkout.scanItem(birthDate, alcohol);
+
+        assertEquals(5000L, checkout.getTotal().getValue());
+        assertEquals(euro, checkout.getTotal().getCurrency());
     }
 }

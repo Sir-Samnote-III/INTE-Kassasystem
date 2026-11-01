@@ -44,21 +44,21 @@ public class Checkout {
     }
 
     // 1. Scanna vara - Använder Mohammads "getPriceWithDeposit"
-    //Vararg
-    public void scanItem(Item... items /*, LocalDate birDate*/) {
+    public void scanItem(LocalDate birthDate, Item... items) {
         if (this.activeStaff == null) {
             throw new IllegalStateException("No staff logged in at checkout");
         }
 
-        /*
-        if (!ageControl.meetsAge(birDate, item.getAgeLimit(), LocalDate.now())) {
-            throw new IllegalStateException("Customer does not meet age requirement");
-        }
-        */
-
         long newTotal = currentTotal.getValue();
-        // Loopa igenom alla varor som skickas in
+
         for (Item item : items) {
+
+            if (item.getAgeLimit() > ProductAgeLimits.NO_AGE_LIMIT) {
+                if (!ageControl.meetsAge(birthDate, item.getAgeLimit(), LocalDate.now())) {
+                    throw new IllegalStateException("Customer does not meet age requirement");
+                }
+            }
+
             scannedItems.add(item);
             newTotal += item.getPriceWithDeposit().getValue();
         }

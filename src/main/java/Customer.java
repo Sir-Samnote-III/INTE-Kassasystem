@@ -18,6 +18,7 @@ public class Customer {
     private BigDecimal totalKopSumma = BigDecimal.ZERO;
     private BigDecimal biggestPurchase = BigDecimal.ZERO;
     private LocalDate latestPruchase;
+    private LocalDate birthDate;
 
     public Customer(String customerNamn, String customerId, String adress, String personnummer, String telefonnummer, String ePostadress) {
         this(customerNamn, customerId, adress, personnummer, telefonnummer, ePostadress, null, CustomerRole.STANDARD);
@@ -109,5 +110,9 @@ public class Customer {
 
     public LocalDate getLatestPurchase() {
         return latestPruchase;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 }
