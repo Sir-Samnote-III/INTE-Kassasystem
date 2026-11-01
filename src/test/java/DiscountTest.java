@@ -10,7 +10,7 @@ public class DiscountTest {
     //Regel 1: Pensionär, köp över 999kr, inte helgdag -> 15% rabatt (10 + 5)
     @Test
     void applyDiscount_PensionerOver999OnRegularDay_Returns15PercentDiscount(){
-        Money price = new Money(100000, "SEK");
+        Money price = new Money(1000_00, "SEK");
         Discount discount = new Discount();
 
         Money discountedPrice = discount.applyDiscount(price, CustomerRole.PENSIONER, false, false);

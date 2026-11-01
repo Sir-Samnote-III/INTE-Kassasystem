@@ -53,7 +53,7 @@ public class Checkout {
         scannedItems.add(item);
 
         // Här knyter vi in Mohammads logik för pant!
-        int newTotal = currentTotal.getValue() + item.getPriceWithDeposit().getValue();
+        long newTotal = currentTotal.getValue() + item.getPriceWithDeposit().getValue();
         currentTotal = new Money(newTotal, baseCurrency);
     }
 
@@ -98,7 +98,7 @@ public class Checkout {
         this.currentCustomer.getMembership().redeemPoints(pointsToRedeem);
 
         // 2. Minska totalbeloppet i kassan (Eftersom er uträkning ger att 1 poäng = 1 öre)
-        int newTotal = Math.max(0, currentTotal.getValue() - pointsToRedeem);
+        long newTotal = Math.max(0, currentTotal.getValue() - pointsToRedeem);
 
         this.currentTotal = new Money(newTotal, baseCurrency);
     }

@@ -1,9 +1,9 @@
 public class Money {
 
-    int value;
+    long value;
     String currency;
 
-    public Money(int value, String currency) {
+    public Money(long value, String currency) {
         this.value = value;
         this.currency = currency;
     }
@@ -12,7 +12,7 @@ public class Money {
         return (double) this.getValue()/100;
     }
 
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 

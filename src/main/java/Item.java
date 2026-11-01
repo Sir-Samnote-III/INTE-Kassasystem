@@ -40,7 +40,7 @@ public class Item {
     }
 
     public Money getPriceWithDeposit(){
-        int total = price.getValue() + deposit.getValue();
+        long total = price.getValue() + deposit.getValue();
         return new Money(total, price.getCurrency());
     }
 }

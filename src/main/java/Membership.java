@@ -81,7 +81,8 @@ public class Membership {
             percentage = 3;
         }
 
-        int gainedPoints = (int) ((long) pruchaseAmount.getValue() * percentage / 100);
+        long gainedPoints = (int) ((long) pruchaseAmount.getValue() * percentage / 100);
+
         totalPoints += gainedPoints;
     }
 
