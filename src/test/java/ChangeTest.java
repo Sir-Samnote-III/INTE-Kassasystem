@@ -55,7 +55,7 @@ public class ChangeTest {
         Money payment = new Money(1000, sek);
         Change change = new Change();
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->{
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () ->{
             change.calculateChange(price, payment);
         });
         assertEquals("Short payment", exception.getMessage());

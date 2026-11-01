@@ -7,7 +7,7 @@ public class CurrencyTest {
     void currencyShouldStoreCodeAndName(){
         Currency sek = new Currency(CurrencyCode.SEK, "Svenska kronor", "kr");
 
-        assertEquals("SEK", sek.getCode());
+        assertEquals(CurrencyCode.SEK, sek.getCode());
         assertEquals("Svenska kronor", sek.getName());
         assertEquals("kr", sek.getSymbol());
     }
@@ -16,7 +16,7 @@ public class CurrencyTest {
     void currencyShouldStoreExchangeRate(){
         Currency eur = new Currency(CurrencyCode.EUR, "Euro", "€", 11.50);
 
-        assertEquals("EUR", eur.getCode());
+        assertEquals(CurrencyCode.EUR, eur.getCode());
         assertEquals("Euro", eur.getName());
         assertEquals("€", eur.getSymbol());
 
