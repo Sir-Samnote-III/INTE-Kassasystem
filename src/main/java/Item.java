@@ -6,7 +6,7 @@ public class Item {
     //kommer behöva en private final int ageLimit och den bör anpassas med denna klass
 
     public Item(String name, Money price) {
-        this(name, price, new Money(0, price.getCurrency()));
+        this(name, price, price == null ? null : new Money(0, price.getCurrency()));
     }
     
     public Item(String name, Money price, Money deposit){

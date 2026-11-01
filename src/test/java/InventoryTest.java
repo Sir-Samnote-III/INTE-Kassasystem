@@ -6,19 +6,19 @@ import static org.junit.jupiter.api.Assertions.*;
 public class InventoryTest{
 
     // Svensk krona som används i alla tester (växelkurs 1.0 eftersom sek är basvalutan).
-    private final Currency sek = new Currency(CurrencyCode.sek, "Svensk krona", "kr", 1.0);
+    private final Currency sek = new Currency(CurrencyCode.SEK, "Svensk krona", "kr", 1.0);
 
     @Test 
     void itemNotInInventoryHasZeroStock(){
         Inventory inventory = new Inventory();
-        Item banana = new Item("Banana", new Money(1000, "sek"));
+        Item banana = new Item("Banana", new Money(1000, sek));
         assertEquals(0, inventory.getStock(banana));   
     }
 
     @Test 
     void addingStockIncreasesStock(){
         Inventory inventory = new Inventory();
-        Item banana = new Item("Banana", new Money(1000, "sek"));
+        Item banana = new Item("Banana", new Money(1000, sek));
 
         inventory.addStock(banana, 10);
 
@@ -28,7 +28,7 @@ public class InventoryTest{
     @Test
     void removingStockDecreasesStock() {
         Inventory inventory = new Inventory();
-        Item banana = new Item("Banana", new Money(1000, "sek"));
+        Item banana = new Item("Banana", new Money(1000, sek));
         inventory.addStock(banana, 10);
 
         inventory.removeStock(banana, 3);
@@ -39,7 +39,7 @@ public class InventoryTest{
     @Test
     void removingAllStockGivesZero() {
         Inventory inventory = new Inventory();
-        Item banana = new Item("Banana", new Money(1000, "sek"));
+        Item banana = new Item("Banana", new Money(1000, sek));
         inventory.addStock(banana, 10);
 
         inventory.removeStock(banana, 10);
@@ -50,7 +50,7 @@ public class InventoryTest{
     @Test
     void removingMoreThanStockThrowsException() {
         Inventory inventory = new Inventory();
-        Item banana = new Item("Banana", new Money(1000, "sek"));
+        Item banana = new Item("Banana", new Money(1000, sek));
         inventory.addStock(banana, 10);
 
         assertThrows(IllegalStateException.class, () -> inventory.removeStock(banana, 11));
@@ -61,7 +61,7 @@ public class InventoryTest{
     @ValueSource(ints = {0, -1})
     void addingInvalidQuantityThrowsException(int quantity){
         Inventory inventory = new Inventory();
-        Item banana = new Item("Banana", new Money(1000, "sek"));
+        Item banana = new Item("Banana", new Money(1000, sek));
 
         assertThrows(IllegalArgumentException.class, () -> inventory.addStock(banana, quantity));
     }
@@ -70,7 +70,7 @@ public class InventoryTest{
     @ValueSource(ints = {0, -1})
     void removingInvalidQuantityThrowsException(int quantity){
         Inventory inventory = new Inventory();
-        Item banana = new Item("Banana", new Money(1000, "sek"));
+        Item banana = new Item("Banana", new Money(1000, sek));
         inventory.addStock(banana, 10);
 
         assertThrows(IllegalArgumentException.class, () -> inventory.removeStock(banana, quantity));
