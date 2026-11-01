@@ -12,9 +12,7 @@ public class AgeControlTest {
         LocalDate fodelseDatum = LocalDate.of(2006, 10, 20);
         LocalDate dagensDatum = LocalDate.of(2026, 10, 20);
 
-        assertTrue(control.meetsAge(
-            fodelseDatum, 20, dagensDatum
-        ));
+        assertTrue(control.meetsAge(fodelseDatum, 20, dagensDatum));
     }
 
     @Test 
@@ -27,5 +25,25 @@ public class AgeControlTest {
         assertFalse(control.meetsAge(
             fodelseDatum, 20, dagensDatum
         ));
+    }
+
+    @Test
+    void customerWhoTurns20TomorrowDoesNotMeetAgeRequirement() {    
+        LocalDate today = LocalDate.of(2026, 11, 1);
+        LocalDate birthDate = today.minusYears(20).plusDays(1);
+
+        AgeControl ageControl = new AgeControl();
+
+        assertFalse(ageControl.meetsAge(birthDate, 20, today));
+    }
+
+    @Test
+    void customerWhoTurns20TodayMeetsAgeRequirement() {
+        LocalDate today = LocalDate.of(2026, 11, 1);
+        LocalDate birthDate = today.minusYears(20);
+
+        AgeControl ageControl = new AgeControl();
+
+        assertTrue(ageControl.meetsAge(birthDate, 20, today));
     }
 }

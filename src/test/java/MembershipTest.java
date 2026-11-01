@@ -166,11 +166,7 @@ public class MembershipTest {
             LocalDate.of(2026, 12, 31)
         );
 
-        membership.registerPoints(
-            new Money(10000L, sek),
-            CustomerRole.STUDENT,
-            true
-        );
+        membership.registerPoints(new Money(10000L, sek), CustomerRole.STUDENT, true);
 
         assertEquals(300, membership.getPoints());
     }
@@ -266,21 +262,11 @@ public class MembershipTest {
 
     @Test
     void removePointsThrowsExceptionWhenInsufficientPoints() {
-        Membership membership = new Membership(
-            LocalDate.now(),
-            LocalDate.now().plusYears(1)
-        );
+        Membership membership = new Membership(LocalDate.now(), LocalDate.now().plusYears(1));
 
-        membership.registerPoints(
-            new Money(1000L, sek),
-            CustomerRole.STANDARD,
-            false
-        );
+        membership.registerPoints(new Money(1000L, sek), CustomerRole.STANDARD, false);
 
-        IllegalStateException exception = assertThrows(
-            IllegalStateException.class,
-            () -> membership.removePoints(50)
-        );
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> membership.removePoints(50));
 
         assertEquals("Not enough points on membership", exception.getMessage());
     }
@@ -329,5 +315,20 @@ public class MembershipTest {
 
         assertEquals(100L, bonus.getValue());
         assertEquals(100, membership.getPoints());
+    }
+
+    @Test 
+    void removingMorePointsThanAvailableDoesNotChangeTotal() {
+        Membership membership = new Membership(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31));
+
+        Money purchase = new Money(10000, sek);
+        membership.registerPoints(purchase, CustomerRole.STANDARD, false);
+
+        assertEquals(200, membership.getPoints());
+
+        assertThrows(IllegalStateException.class, () -> membership.removePoints(250));
+
+        assertEquals(200, membership.getPoints());
+
     }
 }

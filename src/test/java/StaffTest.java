@@ -100,7 +100,7 @@ public class StaffTest {
       assertEquals(1, staff.getShiftAmountSale());
    }
 
-   @Test // 
+   @Test
    void newShiftStartsWithEmptyStatistics() {
       Staff staff = new Staff("S01", "Anna");
 
