@@ -19,7 +19,7 @@ public class DiscountTest {
     }
     @Test
     //Regel 3: Pensionär, köp under 1 000kr, inte helgdag --> 10% rabatt
-    void applyDiscount_PensionerUnder1000OnRegularDay_Returns10PercentDiscount(){
+    void applyDiscount_PensionerBelow1000OnRegularDay_Returns10PercentDiscount(){
         Money price = new Money(10000, sek);
         Discount discount = new Discount();
 
@@ -39,7 +39,7 @@ public class DiscountTest {
 
     //Regel 4: Pensionär, köp under 1 000 kr, helgdag -> 0% rabatt
     @Test
-    void applyDiscount_PensionerUnder1000OnHoliday_Returns0PercentDiscount(){
+    void applyDiscount_PensionerBelow1000OnHoliday_Returns0PercentDiscount(){
         Money price = new Money(10000, sek);
         Discount discount = new Discount();
 
@@ -79,7 +79,7 @@ public class DiscountTest {
 
     //Regel 8: Student, köp under 1 000kr, ej torsdag, ej helg -> 5% rabatt
     @Test
-    void applyDiscount_StudentUnder1000NotThursdayNotHoliday_Returns5PercentDiscount(){
+    void applyDiscount_StudentBelow1000NotThursdayNotHoliday_Returns5PercentDiscount(){
         Money price = new Money(90000,sek );
         Discount discount = new Discount();
 
@@ -99,7 +99,7 @@ public class DiscountTest {
 
     //Regel 10: Student, köp under 1000 kr, torsdag, helgdag -> 0% rabatt
     @Test
-    void applyDiscount_StudentUnder1000IsThursdayIsHoliday_Returns0PercentDiscount(){
+    void applyDiscount_StudentBelow1000IsThursdayIsHoliday_Returns0PercentDiscount(){
         Money price = new Money(90000, sek);
         Discount discount = new Discount();
 
@@ -119,7 +119,7 @@ public class DiscountTest {
 
     //Regel 12: Standardkund, köp under 1000kr -> 0% rabatt
     @Test
-    void applyDiscount_StandardCustomerUnder1000_ReturnsOriginalPrice(){
+    void applyDiscount_StandardCustomerBelow1000_ReturnsOriginalPrice(){
         Money price = new Money(50000, sek);
         Discount discount = new Discount();
 
