@@ -12,7 +12,7 @@ public class Currency {
         this.exchangeRate = exchangeRate;
     }
     public Currency(CurrencyCode code, String name, String symbol){
-        if (!code.equals("SEK")){
+        if (code !=CurrencyCode.SEK){
             throw new IllegalArgumentException("Exchange rate is required for foreign currencies");
         }
         this.code = code;
