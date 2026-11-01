@@ -1,17 +1,17 @@
 public class Currency {
 
-    private String code;
+    private CurrencyCode code;
     private String name;
     private String symbol;
     private double exchangeRate;
 
-    public Currency(String code, String name, String symbol, double exchangeRate){
+    public Currency(CurrencyCode code, String name, String symbol, double exchangeRate){
         this.code = code;
         this.name = name;
         this.symbol = symbol;
         this.exchangeRate = exchangeRate;
     }
-    public Currency(String code, String name, String symbol){
+    public Currency(CurrencyCode code, String name, String symbol){
         if (!code.equals("SEK")){
             throw new IllegalArgumentException("Exchange rate is required for foreign currencies");
         }
@@ -21,7 +21,7 @@ public class Currency {
         this.exchangeRate = 1.0;
     }
 
-    public String getCode() {
+    public CurrencyCode getCode() {
         return code;
     }
 

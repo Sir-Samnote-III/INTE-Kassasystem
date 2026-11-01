@@ -74,7 +74,7 @@ public class Customer {
         return membership;
     }
 
-    public void registreradeKop(BigDecimal belopp, boolean isThursday) {
+    public void registreradeKop(BigDecimal belopp, boolean isThursday, Currency currency) {
         if (belopp == null || belopp.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Köp summan måste vara större än noll");
         }
@@ -90,7 +90,7 @@ public class Customer {
         if (membership != null) {
             int beloppIOren = belopp.movePointRight(2).intValueExact();
 
-            Money kopesumma = new Money(beloppIOren, "SEK");
+            Money kopesumma = new Money(beloppIOren, currency);
             membership.registerPoints(kopesumma, customerRole, isThursday);
         }
     }

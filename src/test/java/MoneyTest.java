@@ -6,13 +6,16 @@ public class MoneyTest {
 
     @Test
     void moneyExist() {
-        Money pris = new Money(100, "SEK");
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
+        Money pris = new Money(100,sek );
         assertNotNull(pris);
     }
 
     @Test
     void correctAmountOfMoney() {
-        Money pris = new Money(1050, "SEK");
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
+
+        Money pris = new Money(1050, sek);
         assertEquals(10.5, pris.formattedValue());
     }
 }

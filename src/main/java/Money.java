@@ -1,9 +1,12 @@
 public class Money {
 
-    long value;
-    String currency;
+    private long value;
+    private Currency currency;
 
-    public Money(long value, String currency) {
+    public Money(long value, Currency currency) {
+        if (currency == null){
+            throw new IllegalArgumentException("Currency cannot be null");
+        }
         this.value = value;
         this.currency = currency;
     }
@@ -16,7 +19,7 @@ public class Money {
         return value;
     }
 
-    public String getCurrency(){
+    public Currency getCurrency(){
         return currency;
     }
 }

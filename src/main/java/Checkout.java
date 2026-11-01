@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.time.DayOfWeek;
 
 public class Checkout {
-    private String baseCurrency;
+    private Currency baseCurrency;
     private Staff activeStaff;
     private Customer currentCustomer; // Kunden som gör köpet
     private AgeControl ageControl;
@@ -16,7 +16,7 @@ public class Checkout {
     private Discount discountCalculator;
     private Change changeCalculator;
 
-    public Checkout(String baseCurrency, Staff activeStaff) {
+    public Checkout(Currency baseCurrency, Staff activeStaff) {
         this.baseCurrency = baseCurrency;
         this.activeStaff = activeStaff;
         this.scannedItems = new ArrayList<>();
@@ -39,22 +39,25 @@ public class Checkout {
 
     // 1. Scanna vara - Använder Mohammads "getPriceWithDeposit"
     //Vararg
-    public void scanItem(Item item /*, LocalDate birDate*/) {
+    public void scanItem(Item... items /*, LocalDate birDate*/) {
         if (this.activeStaff == null) {
             throw new IllegalStateException("No staff logged in at checkout");
         }
 
-        /* 
+        /*
         if (!ageControl.meetsAge(birDate, item.getAgeLimit(), LocalDate.now())) {
             throw new IllegalStateException("Customer does not meet age requirement");
         }
         */
 
-        scannedItems.add(item);
+        long newTotal = currentTotal.getValue();
+        // Loopa igenom alla varor som skickas in
+        for (Item item : items) {
+            scannedItems.add(item);
+            newTotal += item.getPriceWithDeposit().getValue();
+        }
 
-        // Här knyter vi in Mohammads logik för pant!
-        long newTotal = currentTotal.getValue() + item.getPriceWithDeposit().getValue();
-        currentTotal = new Money(newTotal, baseCurrency);
+        this.currentTotal = new Money(newTotal, baseCurrency);
     }
 
     // 2. Applicera rabatt - Använder Antonios Discount
@@ -78,7 +81,7 @@ public class Checkout {
             boolean isThursday =
             LocalDate.now().getDayOfWeek() == DayOfWeek.THURSDAY;
 
-            currentCustomer.registreradeKop(belopp, isThursday);
+            currentCustomer.registreradeKop(belopp, isThursday, this.baseCurrency);
         }
 
         // RÄTTELSE 3: Registrera försäljningen på den inloggade personalen!
@@ -88,7 +91,7 @@ public class Checkout {
     }
 
     // 4. Löser in poäng från det kopplade medlemskapet
-    public void redeemPoints(int pointsToRedeem) {
+    public void applyBonusPoints(int pointsToRedeem) {
         // Kontrollera att det finns en kund OCH att kunden har ett medlemskap
         if (this.currentCustomer == null || this.currentCustomer.getMembership() == null) {
             throw new IllegalStateException("No active customer with membership attached to checkout");

@@ -5,7 +5,7 @@ public class CurrencyTest {
 
     @Test
     void currencyShouldStoreCodeAndName(){
-        Currency sek = new Currency("SEK", "Svenska kronor", "kr");
+        Currency sek = new Currency(CurrencyCode.SEK, "Svenska kronor", "kr");
 
         assertEquals("SEK", sek.getCode());
         assertEquals("Svenska kronor", sek.getName());
@@ -14,7 +14,7 @@ public class CurrencyTest {
 
     @Test
     void currencyShouldStoreExchangeRate(){
-        Currency eur = new Currency("EUR", "Euro", "€", 11.50);
+        Currency eur = new Currency(CurrencyCode.EUR, "Euro", "€", 11.50);
 
         assertEquals("EUR", eur.getCode());
         assertEquals("Euro", eur.getName());
@@ -25,7 +25,7 @@ public class CurrencyTest {
     @Test
     void shouldThrowExceptionWhenCreatingForeignCurrencyWithoutExchangeRate(){
         Exception exception = assertThrows(IllegalArgumentException.class, () ->{
-            new Currency("Eur", "Euro","€");
+            new Currency(CurrencyCode.EUR, "Euro","€");
         });
         assertEquals("Exchange rate is required for foreign currencies", exception.getMessage());
     }

@@ -101,8 +101,8 @@ public class Membership {
         return totalPoints;
     }
 
-    public Money getBonus() {
-        return new Money(totalPoints, "SEK");
+    public Money getBonus(Currency currency) {
+        return new Money(totalPoints, currency);
     }
 
 }

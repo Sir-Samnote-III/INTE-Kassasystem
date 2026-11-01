@@ -10,15 +10,17 @@ public class Receipt {
 
     private final LocalDateTime dateTime;
 
-    //använder datorns riktiga klocka
-    public Receipt(){
-        this(Clock.systemDefaultZone());
+    private final Currency currency;
+
+    public Receipt(Currency currency){
+        this(Clock.systemDefaultZone(), currency);
     }
 
-    //konstruktor för tester, klockan skickas in utifrån dependency injection
-    public Receipt(Clock clock){
+    public Receipt(Clock clock, Currency currency){
         this.dateTime = LocalDateTime.now(clock);
+        this.currency = currency; // Sparar valutan i klassen
     }
+
 
     //returnerar datum och tid för kvittot
     public LocalDateTime getDateTime(){
@@ -32,12 +34,12 @@ public class Receipt {
 
     //returnerar kvittots totalsumma (pris och pant)
     public Money getTotal(){
-        int total = 0;
+        long total = 0;
         for (Item item : items){
             total += item.getPriceWithDeposit().getValue();
         }
         
-        return new Money(total, "SEK");
+        return new Money(total, currency);
     }
 
     //tar bort bara ett exemplar av varan från kvittot och ifall varan finns flera gånger tas bara ett exmplar bort
