@@ -3,6 +3,7 @@ public class Item {
     private final String name;
     private final Money price;
     private final Money deposit;
+    //kommer behöva en private final int ageLimit och den bör anpassas med denna klass
 
     public Item(String name, Money price) {
         this(name, price, new Money(0, "SEK"));

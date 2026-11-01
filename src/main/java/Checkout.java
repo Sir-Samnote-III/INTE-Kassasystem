@@ -8,6 +8,7 @@ public class Checkout {
     private String baseCurrency;
     private Staff activeStaff;
     private Customer currentCustomer; // Kunden som gör köpet
+    private AgeControl ageControl;
 
     private List<Item> scannedItems;
     private Money currentTotal;
@@ -23,6 +24,7 @@ public class Checkout {
 
         this.discountCalculator = new Discount();
         this.changeCalculator = new Change();
+        this.ageControl = new AgeControl();
     }
 
     // Möjliggör inloggning av personal
@@ -37,10 +39,17 @@ public class Checkout {
 
     // 1. Scanna vara - Använder Mohammads "getPriceWithDeposit"
     //Vararg
-    public void scanItem(Item item) {
+    public void scanItem(Item item /*, LocalDate birDate*/) {
         if (this.activeStaff == null) {
             throw new IllegalStateException("No staff logged in at checkout");
         }
+
+        /* 
+        if (!ageControl.meetsAge(birDate, item.getAgeLimit(), LocalDate.now())) {
+            throw new IllegalStateException("Customer does not meet age requirement");
+        }
+        */
+
         scannedItems.add(item);
 
         // Här knyter vi in Mohammads logik för pant!

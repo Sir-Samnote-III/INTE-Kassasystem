@@ -12,6 +12,10 @@ public class AgeControl {
             throw new IllegalArgumentException("Åldersgränsen kan inte vara negativ");
         }
 
+        if (fodelseDatum.isAfter(dagensDatum)) {
+            throw new IllegalArgumentException("Födelsedatum kan inte vara i framtiden");
+        }
+
         LocalDate datumForeAldersGrans = fodelseDatum.plusYears(aldersGrans);
 
         return !dagensDatum.isBefore(datumForeAldersGrans);
