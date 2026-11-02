@@ -44,6 +44,106 @@ public class CustomerTest {
     }
 
     @Test
+    void getCustomerRoleReturnsCorrectRole() {
+        Membership membership = new Membership(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31));
+
+        Customer customer = new Customer(
+            "Anna", "A1", "Stockholm",
+            "200001011234", "0701234567", "anna@gmail.com",
+            membership, CustomerRole.PENSIONER
+        );
+
+        assertEquals(CustomerRole.PENSIONER, customer.getCustomerRole());
+    }
+
+    @Test
+        void birthDateCanBeNull() {
+        Customer customer = new Customer(
+            "Anna", "A1", "Stockholm",
+            "200001011234", "0701234567", "anna@gmail.com",
+            null, CustomerRole.STANDARD
+        );
+
+        assertNull(customer.getBirthDate());
+    }
+
+    @Test
+    void nullPurchaseThrowsException() {
+    Customer customer = new Customer(
+            "Anna", "A1", "Stockholm",
+            "200001011234", "0701234567", "anna@gmail.com"
+        );
+
+        assertThrows(IllegalArgumentException.class,
+            () -> customer.registreradeKop(null, false, sek));
+
+        assertEquals(0, customer.getAntalKop());
+        assertEquals(0, BigDecimal.ZERO.compareTo(customer.getTotalSumma()));
+    }
+
+    @Test
+    void averagePurchaseRoundsToTwoDecimals() {
+        Customer customer = new Customer(
+            "Anna", "A1", "Stockholm",
+            "200001011234", "0701234567", "anna@gmail.com"
+        );
+
+        customer.registreradeKop(new BigDecimal("10.00"), false, sek);
+        customer.registreradeKop(new BigDecimal("10.01"), false, sek);
+        customer.registreradeKop(new BigDecimal("10.02"), false, sek);
+
+        assertEquals(0,
+            new BigDecimal("10.01").compareTo(customer.getAveragePruchase()));
+    }
+
+    @Test
+    void averagePurchaseIsZeroWhenNoPurchases() {
+        Customer customer = new Customer(
+            "Anna", "A1", "Stockholm",
+            "200001011234", "0701234567", "anna@gmail.com"
+        );
+
+        assertEquals(0, BigDecimal.ZERO.compareTo(customer.getAveragePruchase()));
+    }
+
+    @Test
+        void getMembershipReturnsCorrectMembership() {
+        Membership membership = new Membership(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31));
+
+        Customer customer = new Customer(
+            "Anna", "A1", "Stockholm",
+            "200001011234", "0701234567", "anna@gmail.com",
+            membership, CustomerRole.STANDARD
+        );
+
+        assertSame(membership, customer.getMembership());
+    }
+
+    @Test
+    void getBirthDateReturnsCorrectDate() {
+        LocalDate birthDate = LocalDate.of(2000, 5, 15);
+
+        Customer customer = new Customer(
+            "Anna", "A1", "Stockholm",
+            "200005151234", "0701234567", "anna@gmail.com",
+            null, CustomerRole.STANDARD, birthDate
+        );
+
+        assertEquals(birthDate, customer.getBirthDate());
+    }
+
+    @Test
+    void futureBirthDateThrowsException() {
+        assertThrows(IllegalArgumentException.class, () ->
+            new Customer(
+                "Anna", "A1", "Stockholm",
+                "200005151234", "0701234567", "anna@gmail.com",
+                null, CustomerRole.STANDARD, LocalDate.now().plusDays(1)
+            )
+        );
+    }
+
+    @Test
     void kundHarIngaRegistreradeKop() {
         Customer customer = new Customer(
             "Bob", "K01", "Gatan 1",

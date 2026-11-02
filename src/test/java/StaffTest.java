@@ -101,6 +101,18 @@ public class StaffTest {
    }
 
    @Test
+   void registerNullSaleThrowsException() {
+      Staff staff = new Staff("S01", "Anna");
+
+      assertThrows(IllegalArgumentException.class, () -> staff.registerSale(null));
+
+      assertEquals(0, staff.getAmountSale());
+      assertEquals(0, BigDecimal.ZERO.compareTo(staff.getTotalSale()));
+      assertEquals(0, BigDecimal.ZERO.compareTo(staff.getShiftSale()));
+      assertEquals(0, staff.getShiftAmountSale());
+   }
+
+   @Test
    void newShiftStartsWithEmptyStatistics() {
       Staff staff = new Staff("S01", "Anna");
 

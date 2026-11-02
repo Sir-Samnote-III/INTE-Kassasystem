@@ -38,6 +38,47 @@ public class AgeControlTest {
     }
 
     @Test
+    void nullBirthDateThrowsException() {
+        AgeControl control = new AgeControl();
+
+        assertThrows(IllegalArgumentException.class, () ->
+            control.meetsAge(null, 20, LocalDate.of(2026, 11, 1))
+        );
+    }
+
+    @Test
+    void nullTodayDateThrowsException() {
+        AgeControl control = new AgeControl();
+
+        assertThrows(IllegalArgumentException.class, () ->
+            control.meetsAge(LocalDate.of(2000, 1, 1), 20, null)
+        );
+    }
+
+    @Test
+    void negativeAgeLimitThrowsException() {
+        AgeControl control = new AgeControl();
+
+        assertThrows(IllegalArgumentException.class, () ->
+            control.meetsAge(LocalDate.of(2000, 1, 1), -1, LocalDate.of(2026, 11, 1)));
+    }
+
+    @Test
+    void futureBirthDateThrowsException() {
+        AgeControl control = new AgeControl();
+
+        assertThrows(IllegalArgumentException.class, () ->
+            control.meetsAge(LocalDate.of(2026, 11, 2), 20, LocalDate.of(2026, 11, 1)));
+    }
+
+    @Test
+    void zeroAgeLimitIsAlwaysMetForValidBirthDate() {
+        AgeControl control = new AgeControl();
+
+        assertTrue(control.meetsAge(LocalDate.of(2026, 1, 1), 0, LocalDate.of(2026, 11, 1)));
+    }
+
+    @Test
     void customerWhoTurns20TodayMeetsAgeRequirement() {
         LocalDate today = LocalDate.of(2026, 11, 1);
         LocalDate birthDate = today.minusYears(20);

@@ -3,14 +3,14 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 
 public class Customer {
-    
+
     private String customerNamn;
     private String customerId;
     private String adress;
     private String personnummer;
     private String telefonnummer;
     private String ePostadress;
-    
+
     private Membership membership;
     private CustomerRole customerRole;
 
@@ -25,6 +25,10 @@ public class Customer {
     }
 
     public Customer(String customerNamn, String customerId, String adress, String personnummer, String telefonnummer, String ePostadress, Membership membership, CustomerRole customerRole) {
+        this(customerNamn, customerId, adress, personnummer, telefonnummer, ePostadress, membership, customerRole, null);
+    }
+
+    public Customer(String customerNamn, String customerId, String adress, String personnummer, String telefonnummer, String ePostadress, Membership membership, CustomerRole customerRole, LocalDate birthDate) {
         this.customerNamn = customerNamn;
         this.customerId = customerId;
         this.adress = adress;
@@ -33,6 +37,12 @@ public class Customer {
         this.ePostadress = ePostadress;
         this.membership = membership;
         this.customerRole = customerRole;
+
+        if (birthDate != null && birthDate.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("Birth date cannot be in the future");
+        }
+
+        this.birthDate = birthDate;
     }
 
     public String getCustomerId() {

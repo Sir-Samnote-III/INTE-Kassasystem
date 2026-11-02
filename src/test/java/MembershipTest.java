@@ -51,6 +51,34 @@ public class MembershipTest {
     }
 
     @Test
+    void getStartDateReturnsCorrectDate() {
+        LocalDate startDate = LocalDate.of(2026, 1, 1);
+
+        Membership membership = new Membership(
+            startDate,
+            LocalDate.of(2026, 12, 31)
+        );
+
+        assertEquals(startDate, membership.getStartDate());
+    }
+
+    @Test
+    void getDaysRemainingReturnsZeroAfterMembershipEnds() {
+        Membership membership = new Membership(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 1, 10));
+
+        assertEquals(0, membership.getDaysRemaining(LocalDate.of(2026, 1, 11)));
+    }
+
+    @Test
+    void studentGetsNormalPointsOnOtherDays() {
+        Membership membership = new Membership(LocalDate.of(2026, 1, 1),LocalDate.of(2026, 12, 31));
+
+        membership.registerPoints(new Money(10000L, sek), CustomerRole.STUDENT, false);
+
+        assertEquals(200, membership.getPoints());
+    }
+
+    @Test
     void isValidTodayReturnsTrueForValidMembership() {
         Membership membership = new Membership(
             LocalDate.now().minusDays(1),
@@ -329,6 +357,5 @@ public class MembershipTest {
         assertThrows(IllegalStateException.class, () -> membership.removePoints(250));
 
         assertEquals(200, membership.getPoints());
-
     }
 }
