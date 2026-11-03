@@ -1,4 +1,4 @@
-public class Money {
+public final class Money {
 
     private long value;
     private Currency currency;

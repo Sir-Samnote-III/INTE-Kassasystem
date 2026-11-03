@@ -1,4 +1,4 @@
-public class Currency {
+public final class Currency {
 
     private CurrencyCode code;
     private String name;
