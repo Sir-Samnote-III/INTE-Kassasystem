@@ -43,8 +43,8 @@ public class CheckoutTest {
         Money payment = new Money(10000L, sek);
         checkout.pay(payment);
 
-        assertEquals(1, customer.getAntalKop());
-        assertEquals(new BigDecimal("100.00"), customer.getTotalSumma());
+        assertEquals(1, customer.getPurchaseCount());
+        assertEquals(new BigDecimal("100.00"), customer.getTotalAmount());
 
         assertEquals(1, staff.getAmountSale());
         assertEquals(new BigDecimal("100.00"), staff.getTotalSale());

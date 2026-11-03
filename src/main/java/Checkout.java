@@ -94,7 +94,7 @@ public class Checkout {
             boolean isThursday =
             LocalDate.now().getDayOfWeek() == DayOfWeek.THURSDAY;
 
-            currentCustomer.registreradeKop(belopp, isThursday, this.baseCurrency);
+            currentCustomer.registerPurchase(belopp, isThursday, this.baseCurrency);
         }
 
         // RÄTTELSE 3: Registrera försäljningen på den inloggade personalen!

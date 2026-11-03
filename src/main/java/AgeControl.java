@@ -2,22 +2,22 @@ import java.time.LocalDate;
 
 public class AgeControl {
     
-    public boolean meetsAge(LocalDate fodelseDatum, int aldersGrans, LocalDate dagensDatum) {
+    public boolean meetsAge(LocalDate birthDate, int ageLimit, LocalDate currentDate) {
 
-        if (fodelseDatum == null || dagensDatum == null) {
-            throw new IllegalArgumentException("Datum får inte vara null");
+        if (birthDate == null || currentDate == null) {
+            throw new IllegalArgumentException("Date cannot be null");
         }
 
-        if (aldersGrans < 0) {
-            throw new IllegalArgumentException("Åldersgränsen kan inte vara negativ");
+        if (ageLimit < 0) {
+            throw new IllegalArgumentException("Age limit cannot be negative");
         }
 
-        if (fodelseDatum.isAfter(dagensDatum)) {
-            throw new IllegalArgumentException("Födelsedatum kan inte vara i framtiden");
+        if (birthDate.isAfter(currentDate)) {
+            throw new IllegalArgumentException("Birthdate can't be in the future");
         }
 
-        LocalDate datumForeAldersGrans = fodelseDatum.plusYears(aldersGrans);
+        LocalDate ageLimitDate = birthDate.plusYears(ageLimit);
 
-        return !dagensDatum.isBefore(datumForeAldersGrans);
+        return !currentDate.isBefore(ageLimitDate);
     }
 }

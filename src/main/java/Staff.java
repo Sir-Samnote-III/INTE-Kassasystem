@@ -3,27 +3,27 @@ import java.math.BigDecimal;
 public class Staff {
     
     private String staffId;
-    private String namn;
+    private String name;
     private int amountSale = 0;
     private BigDecimal totalSale = BigDecimal.ZERO;
     private BigDecimal shiftSale = BigDecimal.ZERO;
     private int shiftAmountSale = 0;
 
     //regler för bonus kan diskuteras, lägger en för 500kr om personalen säljer för minst 50 000kr i månaden
-    private BigDecimal bonusGrans = new BigDecimal("50000.00");
+    private BigDecimal bonusThreshold = new BigDecimal("50000.00");
     private BigDecimal bonusSale = new BigDecimal("500.00");
 
-    public Staff(String staffId, String namn) {
+    public Staff(String staffId, String name) {
         this.staffId = staffId;
-        this.namn = namn;
+        this.name = name;
     }
 
     public String getStaffId() {
         return staffId;
     }
 
-    public String getNamn() {
-        return namn;
+    public String getName() {
+        return name;
     }
 
     public void registerSale(BigDecimal amount) {
@@ -52,7 +52,7 @@ public class Staff {
     }
 
     public BigDecimal calculateBonus() {
-        if (totalSale.compareTo(bonusGrans) >= 0) {
+        if (totalSale.compareTo(bonusThreshold) >= 0) {
             return bonusSale;
         }
 

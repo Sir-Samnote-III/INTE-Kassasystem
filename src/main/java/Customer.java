@@ -4,44 +4,44 @@ import java.time.LocalDate;
 
 public class Customer {
 
-    private String customerNamn;
+    private String customerName;
     private String customerId;
-    private String adress;
-    private String personnummer;
-    private String telefonnummer;
-    private String ePostadress;
-
+    private String address;
+    private String personalNumber;
+    private String phoneNumber;
+    private String emailAddress;
+ 
     private Membership membership;
     private CustomerRole customerRole;
-
-    private int antalKop = 0;
-    private BigDecimal totalKopSumma = BigDecimal.ZERO;
+ 
+    private int purchaseCount = 0;
+    private BigDecimal totalPurchaseAmount = BigDecimal.ZERO;
     private BigDecimal biggestPurchase = BigDecimal.ZERO;
     private LocalDate latestPruchase;
     private LocalDate birthDate;
-
-    public Customer(String customerNamn, String customerId, String adress, String personnummer, String telefonnummer, String ePostadress) {
-        this(customerNamn, customerId, adress, personnummer, telefonnummer, ePostadress, null, CustomerRole.STANDARD);
+    
+    public Customer(String customerName, String customerId, String address, String personalNumber, String phoneNumber, String emailAddress) {
+        this(customerName, customerId, address, personalNumber, phoneNumber, emailAddress, null, CustomerRole.STANDARD);
     }
-
-    public Customer(String customerNamn, String customerId, String adress, String personnummer, String telefonnummer, String ePostadress, Membership membership, CustomerRole customerRole) {
-        this(customerNamn, customerId, adress, personnummer, telefonnummer, ePostadress, membership, customerRole, null);
+ 
+    public Customer(String customerName, String customerId, String address, String personalNumber, String phoneNumber, String emailAddress, Membership membership, CustomerRole customerRole) {
+        this(customerName, customerId, address, personalNumber, phoneNumber, emailAddress, membership, customerRole, null);
     }
-
-    public Customer(String customerNamn, String customerId, String adress, String personnummer, String telefonnummer, String ePostadress, Membership membership, CustomerRole customerRole, LocalDate birthDate) {
-        this.customerNamn = customerNamn;
+ 
+    public Customer(String customerName, String customerId, String address, String personalNumber, String phoneNumber, String emailAddress, Membership membership, CustomerRole customerRole, LocalDate birthDate) {
+        this.customerName = customerName;
         this.customerId = customerId;
-        this.adress = adress;
-        this.personnummer = personnummer;
-        this.telefonnummer = telefonnummer;
-        this.ePostadress = ePostadress;
+        this.address = address;
+        this.personalNumber = personalNumber;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
         this.membership = membership;
         this.customerRole = customerRole;
-
+ 
         if (birthDate != null && birthDate.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("Birth date cannot be in the future");
         }
-
+ 
         this.birthDate = birthDate;
     }
 
@@ -49,49 +49,49 @@ public class Customer {
         return customerId;
     }
 
-    public String getCustomerNamn() {
-        return customerNamn;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public String getPersonnummer() {
-        return personnummer;
+    public String getPersonalNumber() {
+        return personalNumber;
     }
 
-    public String getTelefunnummer() {
-        return telefonnummer;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public String getEPost() {
-        return ePostadress;
+    public String getEmail() {
+        return emailAddress;
     }
 
     public CustomerRole getCustomerRole() {
         return customerRole;
     }
 
-    public int getAntalKop() {
-        return antalKop;
+    public int getPurchaseCount() {
+        return purchaseCount;
     }
-
-    public BigDecimal getTotalSumma() {
-        return totalKopSumma;
+ 
+    public BigDecimal getTotalAmount() {
+        return totalPurchaseAmount;
     }
-
+ 
     public Membership getMembership() {
         return membership;
     }
 
-    public void registreradeKop(BigDecimal belopp, boolean isThursday, Currency currency) {
+    public void registerPurchase(BigDecimal belopp, boolean isThursday, Currency currency) {
         if (belopp == null || belopp.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Köp summan måste vara större än noll");
         }
 
-        totalKopSumma = totalKopSumma.add(belopp);
-        antalKop++;
+        totalPurchaseAmount = totalPurchaseAmount.add(belopp);
+        purchaseCount++;
         latestPruchase = LocalDate.now();
 
         if (belopp.compareTo(biggestPurchase) > 0) {
@@ -107,11 +107,11 @@ public class Customer {
     }
 
     public BigDecimal getAveragePruchase() {
-        if (antalKop == 0) {
+        if (purchaseCount == 0) {
             return BigDecimal.ZERO;
         }
 
-        return totalKopSumma.divide(BigDecimal.valueOf(antalKop), 2, RoundingMode.HALF_UP);
+        return totalPurchaseAmount.divide(BigDecimal.valueOf(purchaseCount), 2, RoundingMode.HALF_UP);
     }
 
     public BigDecimal getBiggestPurchase() {

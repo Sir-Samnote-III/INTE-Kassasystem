@@ -10,22 +10,22 @@ public class CustomerTest {
     private final Currency sek = new Currency(CurrencyCode.SEK, "Swedish Krona", "kr", 1.0);
 
     @Test
-    void kundMedAllaUppgifter() {
+    void customerWithAllDetails() {
         Customer customer = new Customer(
             "Bob", "K01", "Gatan 1",
             "200002101234", "0701234567", "bob@gmail.com"
         );
 
-        assertEquals("Bob", customer.getCustomerNamn());
+        assertEquals("Bob", customer.getCustomerName());
         assertEquals("K01", customer.getCustomerId());
-        assertEquals("Gatan 1", customer.getAdress());
-        assertEquals("200002101234", customer.getPersonnummer());
-        assertEquals("0701234567", customer.getTelefunnummer());
-        assertEquals("bob@gmail.com", customer.getEPost());
+        assertEquals("Gatan 1", customer.getAddress());
+        assertEquals("200002101234", customer.getPersonalNumber());
+        assertEquals("0701234567", customer.getPhoneNumber());
+        assertEquals("bob@gmail.com", customer.getEmail());
     }
 
     @Test
-    void kunderMedSeparataUppgifter() {
+    void customersWithSeparateDetails() {
         Customer customer1 = new Customer(
             "Bob", "K01", "Storgatan 1",
             "199001011234", "0701234567", "bob@example.com"
@@ -36,10 +36,10 @@ public class CustomerTest {
             "199505056789", "0707654321", "filip@example.com"
         );
 
-        assertEquals("Bob", customer1.getCustomerNamn());
+        assertEquals("Bob", customer1.getCustomerName());
         assertEquals("K01", customer1.getCustomerId());
 
-        assertEquals("Filip", customer2.getCustomerNamn());
+        assertEquals("Filip", customer2.getCustomerName());
         assertEquals("K02", customer2.getCustomerId());
     }
 
@@ -75,10 +75,10 @@ public class CustomerTest {
         );
 
         assertThrows(IllegalArgumentException.class,
-            () -> customer.registreradeKop(null, false, sek));
+            () -> customer.registerPurchase(null, false, sek));
 
-        assertEquals(0, customer.getAntalKop());
-        assertEquals(0, BigDecimal.ZERO.compareTo(customer.getTotalSumma()));
+        assertEquals(0, customer.getPurchaseCount());
+        assertEquals(0, BigDecimal.ZERO.compareTo(customer.getTotalAmount()));
     }
 
     @Test
@@ -88,9 +88,9 @@ public class CustomerTest {
             "200001011234", "0701234567", "anna@gmail.com"
         );
 
-        customer.registreradeKop(new BigDecimal("10.00"), false, sek);
-        customer.registreradeKop(new BigDecimal("10.01"), false, sek);
-        customer.registreradeKop(new BigDecimal("10.02"), false, sek);
+        customer.registerPurchase(new BigDecimal("10.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("10.01"), false, sek);
+        customer.registerPurchase(new BigDecimal("10.02"), false, sek);
 
         assertEquals(0,
             new BigDecimal("10.01").compareTo(customer.getAveragePruchase()));
@@ -144,58 +144,58 @@ public class CustomerTest {
     }
 
     @Test
-    void kundHarIngaRegistreradeKop() {
+    void customerHasNoRegisteredPurchases() {
         Customer customer = new Customer(
             "Bob", "K01", "Gatan 1",
             "200201011234", "0701234567", "bob@gmail.com"
         );
 
-        assertEquals(0, customer.getAntalKop());
+        assertEquals(0, customer.getPurchaseCount());
     }
 
     @Test
-    void registreraEttKop() {
+    void registerOnePurchase() {
         Customer customer = new Customer(
             "Bob", "K01", "Storgatan 1",
             "199001011234", "0701234567", "bob@example.com"
         );
 
-        customer.registreradeKop(new BigDecimal("100.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("100.00"), false, sek);
 
-        assertEquals(1, customer.getAntalKop());
+        assertEquals(1, customer.getPurchaseCount());
     }
 
     @Test
-    void fleraKopUppdateraInformation() {
+    void multiplePurchasesUpdateInformation() {
         Customer customer = new Customer(
             "Bob", "K01", "Storgatan 1",
             "199001011234", "0701234567", "bob@example.com"
         );
 
-        customer.registreradeKop(new BigDecimal("100.00"), false, sek);
-        customer.registreradeKop(new BigDecimal("50.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("100.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("50.00"), false, sek);
 
-        assertEquals(2, customer.getAntalKop());
-        assertEquals(0, new BigDecimal("150.00").compareTo(customer.getTotalSumma()));
+        assertEquals(2, customer.getPurchaseCount());
+        assertEquals(0, new BigDecimal("150.00").compareTo(customer.getTotalAmount()));
     }
 
     @Test
-    void ogilitigtKopForandrarInteHistorik() {
+    void invalidPurchaseDoesNotChangeHistory() {
         Customer customer = new Customer(
             "Marcus", "K01", "Gatan 2",
             "199001011234", "0701234567", "marcus@gmail.com"
         );
 
-        customer.registreradeKop(new BigDecimal("100.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("100.00"), false, sek);
 
-        assertThrows(IllegalArgumentException.class, () -> customer.registreradeKop(new BigDecimal("-20.00"), false, sek));
+        assertThrows(IllegalArgumentException.class, () -> customer.registerPurchase(new BigDecimal("-20.00"), false, sek));
 
-        assertEquals(1, customer.getAntalKop());
-        assertEquals(0, new BigDecimal("100.00").compareTo(customer.getTotalSumma()));
+        assertEquals(1, customer.getPurchaseCount());
+        assertEquals(0, new BigDecimal("100.00").compareTo(customer.getTotalAmount()));
     }
 
     @Test
-    void tvaKunderOlikaHistoriker() {
+    void twoCustomersHaveSeparateHistories() {
         Customer bob = new Customer(
             "Bob", "K01", "Gatan 2",
             "199001011234", "0701234567", "bob@gmail.com"
@@ -206,13 +206,13 @@ public class CustomerTest {
             "200201011234", "0701234557", "anna@gmail.com"
         );
 
-        bob.registreradeKop(new BigDecimal("200.00"), false, sek);
+        bob.registerPurchase(new BigDecimal("200.00"), false, sek);
 
-        assertEquals(1, bob.getAntalKop());
-        assertEquals(0, anna.getAntalKop());
+        assertEquals(1, bob.getPurchaseCount());
+        assertEquals(0, anna.getPurchaseCount());
 
-        assertEquals(0, new BigDecimal("200.00").compareTo(bob.getTotalSumma()));
-        assertEquals(0, BigDecimal.ZERO.compareTo(anna.getTotalSumma()));
+        assertEquals(0, new BigDecimal("200.00").compareTo(bob.getTotalAmount()));
+        assertEquals(0, BigDecimal.ZERO.compareTo(anna.getTotalAmount()));
     }
 
     @Test
@@ -225,7 +225,7 @@ public class CustomerTest {
             membership, CustomerRole.STANDARD
         );
 
-        customer.registreradeKop(new BigDecimal("250.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("250.00"), false, sek);
 
         assertEquals(500, membership.getPoints());
     }
@@ -243,7 +243,7 @@ public class CustomerTest {
             membership, CustomerRole.PENSIONER
         );
 
-        customer.registreradeKop(new BigDecimal("100.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("100.00"), false, sek);
 
         assertEquals(300, membership.getPoints());
     }
@@ -255,7 +255,7 @@ public class CustomerTest {
             "200004225432", "0701234567", "anna@gmail.com"
         );
 
-        customer.registreradeKop(new BigDecimal("200.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("200.00"), false, sek);
 
         assertEquals(0, new BigDecimal("200.00").compareTo(customer.getBiggestPurchase()));
     }
@@ -267,9 +267,9 @@ public class CustomerTest {
             "200004225432", "0701234567", "anna@gmail.com"
         );
 
-        customer.registreradeKop(new BigDecimal("300.00"), false, sek);
-        customer.registreradeKop(new BigDecimal("100.00"), false, sek);
-        customer.registreradeKop(new BigDecimal("600.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("300.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("100.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("600.00"), false, sek);
 
         assertEquals(0, new BigDecimal("600.00").compareTo(customer.getBiggestPurchase()));
     }
@@ -281,7 +281,7 @@ public class CustomerTest {
             "200004225432", "0701234567", "anna@gmail.com"
         );
 
-        customer.registreradeKop(new BigDecimal("300.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("300.00"), false, sek);
 
         assertEquals(LocalDate.now(), customer.getLatestPurchase());
     }
@@ -293,9 +293,9 @@ public class CustomerTest {
             "200004225432", "0701234567", "anna@gmail.com"
         );
 
-        customer.registreradeKop(new BigDecimal("100.00"), false, sek);
-        customer.registreradeKop(new BigDecimal("200.00"), false, sek);
-        customer.registreradeKop(new BigDecimal("300.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("100.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("200.00"), false, sek);
+        customer.registerPurchase(new BigDecimal("300.00"), false, sek);
 
         assertEquals(0, new BigDecimal("200.00").compareTo(customer.getAveragePruchase()));
     }
@@ -307,9 +307,9 @@ public class CustomerTest {
             "200004225432", "0701234567", "anna@gmail.com"
         );
 
-        assertThrows(IllegalArgumentException.class, () -> customer.registreradeKop(new BigDecimal("-100.00"), false, sek));
+        assertThrows(IllegalArgumentException.class, () -> customer.registerPurchase(new BigDecimal("-100.00"), false, sek));
 
-        assertEquals(0, customer.getAntalKop());
-        assertEquals(0, BigDecimal.ZERO.compareTo(customer.getTotalSumma()));
+        assertEquals(0, customer.getPurchaseCount());
+        assertEquals(0, BigDecimal.ZERO.compareTo(customer.getTotalAmount()));
     }
 }

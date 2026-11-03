@@ -11,7 +11,7 @@ public class StaffTest {
         Staff staff = new Staff("P01", "Billy");
 
         assertEquals("P01", staff.getStaffId());
-        assertEquals("Billy", staff.getNamn());
+        assertEquals("Billy", staff.getName());
    }
    
    @Test 
@@ -87,7 +87,7 @@ public class StaffTest {
       assertEquals(2, staff.getAmountSale());
    }
 
-   @Test //
+   @Test
    void invalidDoesNotChangeShiftSales() {
       Staff staff = new Staff("S01", "Bob");
 
