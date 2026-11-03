@@ -6,6 +6,8 @@ import java.util.List;
 
 public class ChangeTest {
     private final Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
+    private final Currency usd = new Currency(CurrencyCode.USD, "American Dollar", "$", 10.42);
+
 
 
     @Test
@@ -100,6 +102,44 @@ public class ChangeTest {
 
         List<Integer> expectedDenominations = Arrays.asList(5000, 2000, 500, 100);
         assertEquals(expectedDenominations, actualDenominations);
+    }
+
+    @Test
+    void calculateWhenPriceIsNull(){
+        //Ogiltig inmatning: Betalningen får inte vara null.
+        Money price = null;
+        Money payment = new Money(10000, sek);
+        Change change = new Change();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->{
+            change.calculateChange(price, payment);
+        });
+        assertEquals("Price cannot be null", exception.getMessage());
+    }
+
+    @Test
+    void calculateWhenPaymentIsNull(){
+        //Ogiltig inmatning: Betalningen får inte vara null.
+        Money price = new Money(10, sek);
+        Money payment = null;
+        Change change = new Change();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->{
+            change.calculateChange(price, payment);
+        });
+        assertEquals("Payment cannot be null", exception.getMessage());
+    }
+    @Test
+    void calculateWhithTwoDifferentCurrencies(){
+        Money price = new Money(5000, usd);
+        Money payment = new Money(10000, sek);
+        Change change = new Change();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->{
+            change.calculateChange(price, payment);
+        });
+        assertEquals("Price and payment must use the same currency", exception.getMessage());
+
     }
 
 }
