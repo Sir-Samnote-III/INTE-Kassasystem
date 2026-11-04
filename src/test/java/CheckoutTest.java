@@ -124,6 +124,16 @@ public class CheckoutTest {
     }
 
     @Test
+    void scanItem_DoesNothingWhenNoItemsProvided(){
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr", 1.0);
+        Checkout checkout = new Checkout(sek, new Staff("S01", "Bert"));
+
+        checkout.scanItem(LocalDate.now());
+        assertEquals(0, checkout.getTotal().getValue());
+
+    }
+
+    @Test
     void pay_ThrowsExceptionWhenStaffIsNull(){
         Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
         Checkout checkout = new Checkout(sek, null);
@@ -158,5 +168,36 @@ public class CheckoutTest {
             checkout.applyBonusPoints((500));
         });
         assertEquals("No active customer with membership attached to checkout", exception.getMessage());
+    }
+
+    @Test
+    void applyBonusPoints_ThrowsExceptionWhenCustomerHasNoMembership(){
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
+        Checkout checkout = new Checkout(sek, new Staff("S01", "Bert"));
+
+        Customer customerWithoutMembership = new Customer("Namn", "ID", "Gata", "90","07", "epost");
+        checkout.attachCustomer(customerWithoutMembership);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, ()->{
+            checkout.applyBonusPoints(500);
+        });
+        assertEquals("No active customer with membership attached to checkout", exception.getMessage());
+    }
+
+    @Test
+    void applyBonusPoints_ReducesTotalWhenSuccessful(){
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
+        Checkout checkout = new Checkout(sek, new Staff("S01", "Bert"));
+
+        Membership membership = new Membership(LocalDate.now().minusDays(1), LocalDate.now().plusYears(1));
+        Customer customer = new Customer("Namn", "ID", "Gata", "90", "07", "epost", membership, CustomerRole.STANDARD);
+        checkout.attachCustomer(customer);
+
+        checkout.scanItem(LocalDate.now(), new Item("Vara", new Money(1500, sek)));
+
+        membership.registerPoints(new Money(50000, sek), CustomerRole.STANDARD, false);
+        checkout.applyBonusPoints(500);
+
+        assertEquals(1000, checkout.getTotal().getValue());
     }
 }
