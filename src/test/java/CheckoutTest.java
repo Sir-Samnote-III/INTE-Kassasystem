@@ -111,4 +111,52 @@ public class CheckoutTest {
         assertEquals(5000L, checkout.getTotal().getValue());
         assertEquals(euro, checkout.getTotal().getCurrency());
     }
+    @Test
+    void scanItem_ThrowsExceptionWhenStaffIsNull(){
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
+        Checkout checkout = new Checkout(sek, null);
+        Item item = new Item("Apelsin", new Money(1000, sek));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () ->{
+            checkout.pay(new Money(1000, sek));
+        });
+        assertEquals("Cannot process payment without active staff", exception.getMessage());
+    }
+
+    @Test
+    void pay_ThrowsExceptionWhenStaffIsNull(){
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
+        Checkout checkout = new Checkout(sek, null);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () ->{
+            checkout.pay(new Money(1000, sek));
+        });
+        assertEquals("Cannot process payment without active staff", exception.getMessage());
+    }
+
+
+    @Test
+    void applyDiscount_UpdatesCurrentTotal(){
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk krona", "kr");
+        Checkout checkout = new Checkout(sek, new Staff("S01", "Bert"));
+
+        //Scanna en vara för 100 sek
+        checkout.scanItem(LocalDate.of(2000, 1, 1), new Item("Vara", new Money(100000, sek)));
+
+        //Pensionär ger 15% discount
+        checkout.applyDiscount(CustomerRole.PENSIONER, false, false);
+        assertEquals(85000, checkout.getTotal().getValue());
+
+    }
+
+    @Test
+    void applyBonusPoints_ThrowsExceptionWhenCustomerOrMembershipMissing(){
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
+        Checkout checkout = new Checkout(sek, new Staff("S01", "Bert"));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () ->{
+            checkout.applyBonusPoints((500));
+        });
+        assertEquals("No active customer with membership attached to checkout", exception.getMessage());
+    }
 }
