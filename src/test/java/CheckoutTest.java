@@ -118,9 +118,21 @@ public class CheckoutTest {
         Item item = new Item("Apelsin", new Money(1000, sek));
 
         IllegalStateException exception = assertThrows(IllegalStateException.class, () ->{
-            checkout.pay(new Money(1000, sek));
+            checkout.scanItem(LocalDate.now(), item);
         });
-        assertEquals("Cannot process payment without active staff", exception.getMessage());
+        assertEquals("No staff logged in at checkout", exception.getMessage());
+    }
+    @Test
+    void setActiveStaff_AllowScanningItems(){
+        Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
+        Checkout checkout = new Checkout(sek, null);
+
+        Staff newStaff = new Staff("S01", "Ny personal");
+        checkout.setActiveStaff(newStaff);
+
+        Item item = new Item("Kexchoklad", new Money(1500, sek));
+        checkout.scanItem(LocalDate.now(), item);
+        assertEquals(1500, checkout.getTotal().getValue());
     }
 
     @Test
@@ -130,9 +142,7 @@ public class CheckoutTest {
 
         checkout.scanItem(LocalDate.now());
         assertEquals(0, checkout.getTotal().getValue());
-
     }
-
     @Test
     void pay_ThrowsExceptionWhenStaffIsNull(){
         Currency sek = new Currency(CurrencyCode.SEK, "Svensk Krona", "kr");
