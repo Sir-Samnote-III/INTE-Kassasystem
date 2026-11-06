@@ -34,7 +34,7 @@ public class TerminalUi {
         String symbol = total.getCurrency().getSymbol();
 
         System.out.println();
-        System.out.println("--- Cart ---");
+        System.out.println("----------- Cart -----------");
 
         if (items.isEmpty()) {
             System.out.println("The cart is empty");
@@ -47,7 +47,7 @@ public class TerminalUi {
         }
 
         System.out.println();
-        long discount = sum - total.getValue();
+        long discount = sum - checkout.getTotal().getValue();
         if (discount > 0) {
             System.out.println("Discount:  " + discount / 100.0 + " " + symbol);
         }
@@ -71,7 +71,20 @@ public class TerminalUi {
             System.out.println(item.getName() + "  " + item.getPriceWithDeposit().formattedValue() + " " + symbol);
         }
 
-        //fortsätter imorgon med att skriva ut hela kvittot
+        System.out.println();
+
+        System.out.println("Subtotal: " + gross.formattedValue() + " " + symbol);
+        if (due < gross.getValue()) {
+            System.out.println("Discount: " + (gross.getValue() - due) / 100.0 + " " + symbol);
+        } 
+
+        System.out.println("Total: " + due / 100.0 + " " + symbol);
+        System.out.println("Incl. VAT (" + VAT_PERCENT + "%):  " + vat / 100.0 + " " + symbol);
+
+        if (currency.getCode() != CurrencyCode.SEK) {
+            System.out.println("Comparable to: " + Math.round(due * currency.getExchangeRate()) / 100.0 + " SEK");
+        }
+        System.out.println("Thank you for your visit");
     }
 
     //== Input handler==/
