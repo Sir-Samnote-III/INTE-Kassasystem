@@ -10,6 +10,8 @@ public class TerminalUi {
     private List<Item> cartItems = new ArrayList<>();
     private static final int VAT_PERCENT = 25; //kommer inte ihåg regel för VAT, ändra eller säg till om någon av er kommer ihåg
 
+    private Scanner scanner = new Scanner(System.in);
+
     //== View renderer ==//
     
     private void showMainMenu() {
@@ -72,5 +74,79 @@ public class TerminalUi {
         //fortsätter imorgon med att skriva ut hela kvittot
     }
 
+    //== Input handler==/
+
+    private int readInt(String prompt){
+        while (true){
+            System.out.print(prompt);
+            try {
+                return Integer.parseInt(scanner.nextLine().trim());
+            } catch(NumberFormatException e){
+                showError("Invalid input. Please enter a number.");
+            }
+        }
+    }
+
+    private long readLong(String prompt){
+        while (true){
+            System.out.print(prompt);
+            try {
+                return Long.parseLong(scanner.nextLine().trim());
+            } catch(NumberFormatException e){
+                showError("Invalid input. Please enter a number.");
+            }
+        }
+    }
+
+    private double readDouble(String prompt){
+        while (true){
+            System.out.print(prompt);
+            try {
+                String input = scanner.nextLine().trim();
+                return Double.parseDouble(input);
+            } catch(NumberFormatException e){
+                showError("Invalid input. Please enter a decimal number.");
+            }
+        }
+    }
+
+    private LocalDate readDate(String prompt){
+        while (true){
+            String input = readString(prompt + " (YYYY-MM-DD): ");
+            try{
+                return LocalDate.parse(input);
+            }catch (Exception e){
+                showError("Invalid date format. Please use exactly YYYY-MM-DD.");
+            }
+        }
+    }
+
+    private int readMenuChoice(String prompt, int min, int max){
+        while (true){
+            int choice = readInt(prompt);
+            if (choice >= min && choice <= max){
+                return choice;
+            }
+            showError("Please select an option between " + min + " and " + max + ".");
+        }
+    }
+
+    private String readString(String prompt){
+        System.out.print(prompt);
+        return scanner.nextLine().trim();
+    }
+
+    private boolean readConfirm(String prompt){
+        while (true) {
+            String input = readString(prompt + " (y/n): ").toLowerCase();
+            if (input.equals("y") || input.equals("yes")){
+                return true;
+            }
+            if (input.equals("n") || input.equals("no")){
+                return false;
+            }
+            showError("Please enter 'y' for yes or 'n' for no.");
+        }
+    }
 
 }
