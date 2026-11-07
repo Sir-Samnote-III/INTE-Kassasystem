@@ -7,6 +7,9 @@ public class Membership {
     private LocalDate endDate;
     private int totalPoints = 0;
 
+    private static final int STADNARD_BONUS_PERCENT = 2;
+    private static final int BONUS_POINT_PERCENT = 3;
+
     private static final int BASE_POINTS = 50;
 
     public Membership(LocalDate startDate, LocalDate endDate) {
@@ -76,14 +79,14 @@ public class Membership {
             throw new IllegalArgumentException("Customer role cannot be null");
         }
 
-        int percentage = 2;
+        int percentage = STADNARD_BONUS_PERCENT;
 
         if (role == CustomerRole.PENSIONER) {
-            percentage = 3;
+            percentage = BONUS_POINT_PERCENT;
         }
 
         if (role == CustomerRole.STUDENT && isThursday) {
-            percentage = 3;
+            percentage = BONUS_POINT_PERCENT;
         }
 
         int gainedPoints = (int) (purchaseAmount.getValue() * percentage / 100);
@@ -110,7 +113,7 @@ public class Membership {
 
 
     public Money getBonus(Currency currency) {
-        long bonusAmount = (totalPoints / BASE_POINTS) * BASE_POINTS;
+        long bonusAmount = (long) (totalPoints / BASE_POINTS) * BASE_POINTS;
         return new Money(bonusAmount, currency);
     }
 }
