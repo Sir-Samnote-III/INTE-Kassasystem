@@ -111,9 +111,20 @@ public final class Membership {
         return totalPoints;
     }
 
-
     public Money getBonus(Currency currency) {
         long bonusAmount = (long) (totalPoints / BASE_POINTS) * BASE_POINTS;
         return new Money(bonusAmount, currency);
+    }
+
+    public Money redeemBonus(Currency currency) {
+        Money bonus = getBonus(currency);
+
+        if (bonus.getValue() <= 0) {
+            throw new IllegalStateException("Not enough points to redeem bonus");
+        }
+
+        removePoints(Math.toIntExact(bonus.getValue()));
+
+        return bonus;
     }
 }
