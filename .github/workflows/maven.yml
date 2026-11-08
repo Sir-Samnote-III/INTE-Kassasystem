@@ -2,7 +2,7 @@ name: Java CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, "gammal-analys"]
   pull_request:
     branches: [main]
   workflow_dispatch:
