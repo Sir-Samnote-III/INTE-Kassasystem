@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
@@ -10,7 +11,7 @@ public class TerminalUi {
     private List<Item> cartItems = new ArrayList<>();
     private static final int VAT_PERCENT = 25; //kommer inte ihåg regel för VAT, ändra eller säg till om någon av er kommer ihåg
 
-    private Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
 
     //== UI Controller ==//
     private final Currency sek = new Currency(CurrencyCode.SEK, "Svensk krona", "kr", 1.0);
