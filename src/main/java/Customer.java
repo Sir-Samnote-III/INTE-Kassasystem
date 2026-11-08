@@ -2,23 +2,23 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 
-public class Customer {
+public final class Customer {
 
-    private String customerName;
-    private String customerId;
-    private String address;
-    private String personalNumber;
-    private String phoneNumber;
-    private String emailAddress;
+    private final String customerName;
+    private final String customerId;
+    private final String address;
+    private final String personalNumber;
+    private final String phoneNumber;
+    private final String emailAddress;
  
-    private Membership membership;
-    private CustomerRole customerRole;
+    private final Membership membership;
+    private final CustomerRole customerRole;
+    private final LocalDate birthDate;
  
     private int purchaseCount = 0;
     private BigDecimal totalPurchaseAmount = BigDecimal.ZERO;
     private BigDecimal biggestPurchase = BigDecimal.ZERO;
     private LocalDate latestPruchase;
-    private LocalDate birthDate;
     
     public Customer(String customerName, String customerId, String address, String personalNumber, String phoneNumber, String emailAddress) {
         this(customerName, customerId, address, personalNumber, phoneNumber, emailAddress, null, CustomerRole.STANDARD);

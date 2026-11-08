@@ -1,13 +1,13 @@
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class Membership {
+public final class Membership {
 
-    private LocalDate startDate;
+    private final LocalDate startDate;
     private LocalDate endDate;
     private int totalPoints = 0;
 
-    private static final int STADNARD_BONUS_PERCENT = 2;
+    private static final int STANDARD_BONUS_PERCENT = 2;
     private static final int BONUS_POINT_PERCENT = 3;
 
     private static final int BASE_POINTS = 50;
@@ -79,7 +79,7 @@ public class Membership {
             throw new IllegalArgumentException("Customer role cannot be null");
         }
 
-        int percentage = STADNARD_BONUS_PERCENT;
+        int percentage = STANDARD_BONUS_PERCENT;
 
         if (role == CustomerRole.PENSIONER) {
             percentage = BONUS_POINT_PERCENT;

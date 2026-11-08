@@ -2,16 +2,16 @@ import java.math.BigDecimal;
 
 public class Staff {
     
-    private String staffId;
-    private String name;
+    private final String staffId;
+    private final String name;
     private int amountSale = 0;
     private BigDecimal totalSale = BigDecimal.ZERO;
     private BigDecimal shiftSale = BigDecimal.ZERO;
     private int shiftAmountSale = 0;
 
     //regler för bonus kan diskuteras, lägger en för 500kr om personalen säljer för minst 50 000kr i månaden
-    private BigDecimal bonusThreshold = new BigDecimal("50000.00");
-    private BigDecimal bonusSale = new BigDecimal("500.00");
+    private final BigDecimal bonusThreshold = new BigDecimal("50000.00");
+    private final BigDecimal bonusSale = new BigDecimal("500.00");
 
     public Staff(String staffId, String name) {
         this.staffId = staffId;
