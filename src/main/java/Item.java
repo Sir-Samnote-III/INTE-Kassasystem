@@ -1,4 +1,4 @@
-public class Item {
+public final class Item {
 
     private final String name;
     private final Money price;

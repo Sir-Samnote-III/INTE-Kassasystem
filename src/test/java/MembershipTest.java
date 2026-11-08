@@ -358,4 +358,23 @@ public class MembershipTest {
 
         assertEquals(200, membership.getPoints());
     }
+
+    @Test 
+    void redeemBonusDedcutsPointsAndReturnsBonus() {
+        Membership membership = new Membership(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31));
+
+        membership.registerPoints(new Money(3750L, sek), CustomerRole.STANDARD, false);
+
+        Money bonus = membership.redeemBonus(sek);
+
+        assertEquals(50L, bonus.getValue());
+        assertEquals(25, membership.getPoints());
+    }
+
+    @Test
+    void redeemBonusWithNoPoints() {
+        Membership membership = new Membership(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31));
+
+        assertThrows(IllegalStateException.class, () -> membership.redeemBonus(sek));
+    }
 }

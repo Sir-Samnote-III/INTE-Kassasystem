@@ -3,7 +3,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Collections;
 
-public class ItemGroup implements Iterable<Item> {
+public final class ItemGroup implements Iterable<Item> {
 
     private final String name;
     private final Set<Item> items = new LinkedHashSet<>();
