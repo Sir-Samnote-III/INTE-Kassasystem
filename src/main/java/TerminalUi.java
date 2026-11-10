@@ -173,6 +173,7 @@ public class TerminalUi {
     //== View renderer ==//
     
     private void showMainMenu() {
+        System.out.println();
         System.out.println("1. Scan item");
         System.out.println("2. View my cart");
         System.out.println("3. Identify as a member");
