@@ -294,7 +294,9 @@ public class MembershipTest {
 
         membership.registerPoints(new Money(1000L, sek), CustomerRole.STANDARD, false);
 
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> membership.removePoints(50));
+        int tooManyPoints = membership.getPoints() + 1;
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> membership.removePoints(tooManyPoints));
 
         assertEquals("Not enough points on membership", exception.getMessage());
     }

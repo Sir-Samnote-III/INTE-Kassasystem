@@ -29,12 +29,13 @@ public class AgeControlTest {
 
     @Test
     void customerWhoTurns20TomorrowDoesNotMeetAgeRequirement() {    
+        int ageLimit = 20;
         LocalDate today = LocalDate.of(2026, 11, 1);
-        LocalDate birthDate = today.minusYears(20).plusDays(1);
+        LocalDate birthDate = today.minusYears(ageLimit).plusDays(1);
 
         AgeControl ageControl = new AgeControl();
 
-        assertFalse(ageControl.meetsAge(birthDate, 20, today));
+        assertFalse(ageControl.meetsAge(birthDate, ageLimit, today));
     }
 
     @Test

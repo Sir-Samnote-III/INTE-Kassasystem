@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.math.BigDecimal;
 
 public class StaffTest {
+
+   private static final BigDecimal PREVIOUS_SALE = new BigDecimal("250.00"); 
     
    @Test 
    void skapaPersonal() {
@@ -116,13 +118,13 @@ public class StaffTest {
    void newShiftStartsWithEmptyStatistics() {
       Staff staff = new Staff("S01", "Anna");
 
-      staff.registerSale(new BigDecimal("250.00"));
+      staff.registerSale(PREVIOUS_SALE);
       staff.resetShift();
 
       assertAll(
       () -> assertTrue(staff.getShiftSale().compareTo(BigDecimal.ZERO) == 0),
       () -> assertTrue(staff.getShiftAmountSale() == 0),
-      () -> assertTrue(staff.getTotalSale().compareTo(new BigDecimal("250.00")) == 0));
+      () -> assertTrue(staff.getTotalSale().compareTo(PREVIOUS_SALE) == 0));
    }
 
    @Test//

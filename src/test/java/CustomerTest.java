@@ -7,7 +7,9 @@ import java.time.LocalDate;
 
 public class CustomerTest {
 
-    private final Currency sek = new Currency(CurrencyCode.SEK, "Swedish Krona", "kr", 1.0);
+    private static final Currency sek = new Currency(CurrencyCode.SEK, "Swedish Krona", "kr", 1.0);
+    private static final int EXPECTED_POINTS = 500;
+    private static final BigDecimal PURCHASE_AMOUNT = new BigDecimal("250.00");
 
     @Test
     void customerWithAllDetails() {
@@ -93,7 +95,7 @@ public class CustomerTest {
         customer.registerPurchase(new BigDecimal("10.02"), false, sek);
 
         assertEquals(0,
-            new BigDecimal("10.01").compareTo(customer.getAveragePruchase()));
+            new BigDecimal("10.01").compareTo(customer.getAveragePurchase()));
     }
 
     @Test
@@ -103,7 +105,7 @@ public class CustomerTest {
             "200001011234", "0701234567", "anna@gmail.com"
         );
 
-        assertEquals(0, BigDecimal.ZERO.compareTo(customer.getAveragePruchase()));
+        assertEquals(0, BigDecimal.ZERO.compareTo(customer.getAveragePurchase()));
     }
 
     @Test
@@ -220,14 +222,14 @@ public class CustomerTest {
         Membership membership = new Membership(LocalDate.of(2026, 2, 1), LocalDate.of(2027, 1, 1));
 
         Customer customer = new Customer(
-            "Anna", "A1", "Gatna 2",
+            "Anna", "A1", "Gatan 2",
             "200004225432", "0701234567", "anna@gmail.com",
             membership, CustomerRole.STANDARD
         );
 
-        customer.registerPurchase(new BigDecimal("250.00"), false, sek);
+        customer.registerPurchase(PURCHASE_AMOUNT, false, sek);
 
-        assertEquals(500, membership.getPoints());
+        assertEquals(EXPECTED_POINTS, membership.getPoints());
     }
 
     @Test
@@ -297,7 +299,7 @@ public class CustomerTest {
         customer.registerPurchase(new BigDecimal("200.00"), false, sek);
         customer.registerPurchase(new BigDecimal("300.00"), false, sek);
 
-        assertEquals(0, new BigDecimal("200.00").compareTo(customer.getAveragePruchase()));
+        assertEquals(0, new BigDecimal("200.00").compareTo(customer.getAveragePurchase()));
     }
 
     @Test

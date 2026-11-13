@@ -106,7 +106,7 @@ public final class Customer {
         }
     }
 
-    public BigDecimal getAveragePruchase() {
+    public BigDecimal getAveragePurchase() {
         if (purchaseCount == 0) {
             return BigDecimal.ZERO;
         }
